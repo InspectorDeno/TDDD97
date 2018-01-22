@@ -1,7 +1,7 @@
 
 body {
     font-family: "Trebuchet MS";
-    background-image: url("Labb1/tree.jpg");
+    background-image: url("tree.jpg");
     height: 100%;
     background-position: bottom;
     background-repeat: no-repeat;
@@ -55,6 +55,7 @@ button{
     outline: 3px solid;
     margin-bottom: 10px;
     padding: 5px;
+    background-color: rgba(40, 30, 100, 0.5);
 }
 
 
@@ -64,4 +65,6 @@ button{
     flex-grow: 1;
     outline: 3px solid;
     padding: 5px;
+        background-color: rgba(40, 30, 100, 0.5);
+
 }
