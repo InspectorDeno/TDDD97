@@ -1,0 +1,60 @@
+<html>
+<head>
+
+    <meta>
+
+    <link href="client.css" type="text/css" rel="stylesheet">
+    <script src="client.js" type="text/javascript"></script>
+    <script src="serverstub.js" type="text/javascript"></script>
+
+
+    <div class="container">
+        <div class="logo">
+            <img src="wimage.png"/>
+        </div>
+        <div class="accountArea">
+            <div class="signIn">
+                <form action="javascript:login();">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" required/><br>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required/><br>
+                    <button type="submit">Login</button>
+                </form>
+
+            </div>
+            <div class="signUp">
+                <h3 align="center">Sign up here</h3>
+                <form action="javascript:signUp();">
+                    <label>First Name</label>
+                    <input type="text" name="signup-firstName" id="signup-firstName" required><br>
+                    <label>Family Name</label>
+                    <input type="text" name="signup-familyName" id="signup-familyName" required><br>
+                    <label>Gender</label>
+                    <select id="signup-gender">
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+
+                    </select> <br>
+                    <label>City</label>
+                    <input type="text" name="signup-city" id="signup-city" required><br>
+                    <label>Country</label>
+                    <input type="text" name="signup-country" id="signup-country" required><br>
+                    <label>Email</label>
+                    <input type="email" name="signup-email" id="signup-email" required><br>
+                    <label>Password</label>
+                    <input type="password" name="signup-pw" id="signup-pw" required><br>
+                    <label>Repeat PSW</label>
+                    <input type="password" name="signup-rpw" id="signup-rpw" required><br>
+                    <button type="submit">Sign Up</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</head>
+<body>
+</body>
+</html>
