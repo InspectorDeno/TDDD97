@@ -1,12 +1,12 @@
 
 body {
+
     font-family: "Trebuchet MS";
     background-image: url("tree.jpg");
     height: 100%;
     background-position: bottom;
     background-repeat: no-repeat;
     background-size: cover;
-
 }
 
 
@@ -32,7 +32,7 @@ button{
     float: right;
 }
 
-.container {
+#container {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -40,18 +40,18 @@ button{
     height: 400px;
 }
 
-.logo {
+#logo {
     outline: 3px solid;
 }
 
-.accountArea {
+#accountArea {
     display: flex;
     flex-direction: column;
     margin-left: 10px;
     width: 250px;
 }
 
-.signIn {
+#signIn {
     outline: 3px solid;
     margin-bottom: 10px;
     padding: 5px;
@@ -59,7 +59,7 @@ button{
 }
 
 
-.signUp {
+#signUp {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
