@@ -3,20 +3,33 @@ var passwordLength = 5;
 
 displayView = function(){
 
+
     document.getElementById("view").innerHTML = document.getElementById("welcomeview").innerHTML;
 };
 
 
 window.onload = function(){
-        document.getElementById("view").innerHTML = document.getElementById("welcomeview").innerHTML;
-
+displayView();
 };
 
 login = function(){
 
-    var email = document.getElementById("email");
-    var password = document.getElementById("password");
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
 
+    var returnCode = serverstub.signIn(email, password);
+
+    if(returnCode.success){
+        // Add userToken to local storage
+        localStorage.token = returnCode.data;
+        // Add user to system
+        displayView();
+
+    } else {
+        // Display error "returnCode.message"
+    }
+
+    console.log(returnCode.message);
 
 
 };
@@ -37,7 +50,6 @@ signup = function(){
     var repeatPassword = document.getElementById("signup-rpw").value;
 
     if(validate(password, repeatPassword)) {
-        // Do stuff
 
         // Convert to JSON-object
         var theUser = {
@@ -52,10 +64,17 @@ signup = function(){
 
         var returnCode = serverstub.signUp(theUser);
 
+        if(returnCode.success){
+            // Log in and Update view
+        } else {
+            // Output server error
+        }
+
+        // Temporary
         console.log("Return: " + returnCode.message);
 
     } else {
-        // Do nothing
+        // DO nothing
     }
 
 
