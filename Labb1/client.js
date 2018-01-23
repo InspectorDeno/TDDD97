@@ -3,13 +3,20 @@ var passwordLength = 5;
 
 displayView = function(){
 
+    if(localStorage.getItem("token") !== null){
+        console.log("token not null");
+        document.getElementById("view").innerHTML = document.getElementById("profileview").innerHTML;
+    } else {
+        document.getElementById("view").innerHTML = document.getElementById("loginview").innerHTML;
+    }
 
-    document.getElementById("view").innerHTML = document.getElementById("welcomeview").innerHTML;
 };
 
 
 window.onload = function(){
-displayView();
+    // Temporary lol until logout
+    localStorage.removeItem("token");
+    displayView();
 };
 
 login = function(){
@@ -21,8 +28,10 @@ login = function(){
 
     if(returnCode.success){
         // Add userToken to local storage
-        localStorage.token = returnCode.data;
-        // Add user to system
+        localStorage.setItem("token", returnCode.data);
+
+        // TODO Add user to system
+        // Display their view
         displayView();
 
     } else {
