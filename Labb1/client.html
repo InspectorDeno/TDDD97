@@ -55,20 +55,41 @@
     </div>
     </script>
 
-    <script type="text/view" id="profileview">
+    <script type="text/html" id="profileview">
          <div id="profile">
          <div id="tabs">
-            <div id="home" onclick="selected(this)">
+            <div id="home" onclick="selectTab(this)" >
             <h3>Home</h3>
             </div>
-            <div id="browse">
+            <div id="browse" onclick="selectTab(this)">
             <h3>Browse</h3>
             </div>
-            <div id="account">
+            <div id="account" onclick="selectTab(this)">
             <h3>Account</h3>
             </div>
             </div>
             <div id="pcontainer">
+                <div id="homeview" class="pcontent">
+                    <button>HAHA</button>
+                    <button>HOME</button>
+                </div>
+                <div id="browseview" class="pcontent">
+                    <button>HAHA</button>
+                    <button>BROWSE</button>
+                </div>
+                <div id="accountview" class="pcontent">
+
+                    <div id="changepassword">
+                    <form action ="javasctipt:changePassword()">
+                        <label>Old Password</label>
+                        <input type="password" id="oldpw" required>
+                        <label>New Password</label>
+                        <input type="password" id="newpw" required>
+                        <button>Change!</button>
+                    </form>
+                    </div>
+                    <button onclick="signout()">ACC</button>
+                </div>
          </div>
          </div>
 

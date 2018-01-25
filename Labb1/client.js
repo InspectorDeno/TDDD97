@@ -110,3 +110,35 @@ validate = function(pw, rpw){
         return checkOK;
     }
 };
+
+selectTab = function(tab){
+
+    var tabs = document.getElementById("tabs").getElementsByTagName("div");
+    // loop through all tabs
+    for(var i=0; i < tabs.length; i++){
+        tabs[i].style.borderBottomColor = "black";
+        tabs[i].style.backgroundColor = "#969c99";
+    }
+    // specify appearance of specific tab
+    tab.style.borderBottomColor = "#c7ceca";
+    tab.style.backgroundColor = "#c7ceca";
+
+    var views = document.getElementById("pcontainer").getElementsByClassName("pcontent");
+    // loop through all views
+    for(var j=0; j < views.length; j++) {
+        console.log(views[j].id);
+        //
+        if(views[j].id === tab.id+"view"){
+            // set the correct view to be displayed
+            views[j].style.display = "flex";
+        } else {
+            // the other ones are hidden
+            views[j].style.display = "none";
+        }
+    }
+
+};
+
+signout = function(){
+    
+}
