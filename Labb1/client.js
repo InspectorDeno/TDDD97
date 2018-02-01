@@ -34,6 +34,8 @@ login = function(){
         displayView();
 
     } else {
+        document.getElementById("signinError").innerHTML += returnCode.message;
+        console.log(returnCode.message);
         // TODO:Display error "returnCode.message"
     }
 
@@ -76,12 +78,14 @@ signup = function(){
         if(returnCode.success){
             displayView();
         } else {
-            console.log(returnCode.message)
+            console.log(returnCode.message);
+            document.getElementById("signupError").innerHTML = returnCode.message;
             // TODO: Output server error
         }
 
     } else {
         // TODO: Return error message
+        document.getElementById("signupError").innerHTML = changePass;
         console.log(changePass);
     }
 

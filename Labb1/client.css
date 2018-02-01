@@ -49,14 +49,14 @@ button{
     width: 250px;
 }
 
-#signIn {
+#signin {
     outline: 3px solid;
     margin-bottom: 10px;
     padding: 5px;
     background-color: rgba(198, 106, 26, 0.76);
 }
 
-#signUp {
+#signup {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -113,5 +113,9 @@ button{
     width: 200px;
 }
 
-
-
+.error {
+    color: red;
+    font-weight: bold;
+    width: 100%;
+    font-size: 14px;
+}

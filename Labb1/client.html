@@ -14,7 +14,7 @@
             <img src="wimage.png"/>
         </div>
         <div id="accountArea">
-            <div id="signIn">
+            <div id="signin">
                 <form action="javascript:login();">
                     <label for="email">Email</label>
                     <input type="email" name="email" id="email" required/><br>
@@ -22,9 +22,9 @@
                     <input type="password" name="password" id="password" required/><br>
                     <button type="submit">Login</button>
                 </form>
-
+                <div id="signinError" class="error"></div>
             </div>
-            <div id="signUp">
+            <div id="signup">
                 <h3 align="center">Sign up here</h3>
                 <form action="javascript:signup();">
                     <label>First Name</label>
@@ -48,8 +48,8 @@
                     <label>Repeat PSW</label>
                     <input type="password" name="signup-rpw" id="signup-rpw" required><br>
                     <button type="submit">Sign Up</button>
-
                 </form>
+                <div id="signupError" class="error"></div>
             </div>
         </div>
     </div>
