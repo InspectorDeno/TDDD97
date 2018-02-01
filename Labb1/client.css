@@ -104,6 +104,7 @@ button{
     flex-direction: row;
     height: 100%;
     width: 80%;
+    justify-content: center;
 }
 
 #changepassword{
@@ -111,4 +112,6 @@ button{
     flex-direction: column;
     width: 200px;
 }
+
+
 

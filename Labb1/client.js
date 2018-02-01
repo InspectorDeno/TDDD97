@@ -1,12 +1,12 @@
 var passwordLength = 5;
 
-
 displayView = function(){
 
     if(localStorage.getItem("token") !== null){
         console.log("token not null");
         document.getElementById("view").innerHTML = document.getElementById("profileview").innerHTML;
     } else {
+        console.log("token is null loading loginView");
         document.getElementById("view").innerHTML = document.getElementById("loginview").innerHTML;
     }
 
@@ -14,8 +14,7 @@ displayView = function(){
 
 
 window.onload = function(){
-    // Temporary lol until logout
-    localStorage.removeItem("token");
+    // TODO:Temporary lol until logout
     displayView();
 };
 
@@ -35,16 +34,17 @@ login = function(){
         displayView();
 
     } else {
-        // Display error "returnCode.message"
+        // TODO:Display error "returnCode.message"
     }
 
+    // For now...
     console.log(returnCode.message);
 
 
 };
+
+
 signup = function(){
-
-
 
     var email = document.getElementById("signup-email").value;
     var password = document.getElementById("signup-pw").value;
@@ -54,11 +54,11 @@ signup = function(){
     var city = document.getElementById("signup-city").value;
     var country = document.getElementById("signup-country").value;
 
-
-
     var repeatPassword = document.getElementById("signup-rpw").value;
 
-    if(validate(password, repeatPassword)) {
+    var changePass = validate(password, repeatPassword);
+
+    if(changePass === "OK") {
 
         // Convert to JSON-object
         var theUser = {
@@ -74,16 +74,15 @@ signup = function(){
         var returnCode = serverstub.signUp(theUser);
 
         if(returnCode.success){
-            // Log in and Update view
+            displayView();
         } else {
-            // Output server error
+            console.log(returnCode.message)
+            // TODO: Output server error
         }
 
-        // Temporary
-        console.log("Return: " + returnCode.message);
-
     } else {
-        // DO nothing
+        // TODO: Return error message
+        console.log(changePass);
     }
 
 
@@ -92,22 +91,16 @@ signup = function(){
 
 validate = function(pw, rpw){
 
-    var checkOK;
-
-    if(pw < passwordLength){
-        // Display error to specific error area and return false
-        return false;
-
+    // Password needs to be long enough
+    if(pw.length >= passwordLength) {
+        // And match with repeatet password
+        if(pw === rpw){
+            return "OK"
+        } else {
+            return "Passwords don't match";
+        }
     } else {
-        checkOK = true;
-    }
-
-    if(pw !== rpw){
-        // Display error to specific error area and return false
-        return false;
-
-    } else {
-        return checkOK;
+        return "Password has to be at least " + passwordLength + " characters long";
     }
 };
 
@@ -126,8 +119,6 @@ selectTab = function(tab){
     var views = document.getElementById("pcontainer").getElementsByClassName("pcontent");
     // loop through all views
     for(var j=0; j < views.length; j++) {
-        console.log(views[j].id);
-        //
         if(views[j].id === tab.id+"view"){
             // set the correct view to be displayed
             views[j].style.display = "flex";
@@ -139,6 +130,30 @@ selectTab = function(tab){
 
 };
 
-signout = function(){
-    
-}
+signOut = function(){
+    console.log("signing out. removing token...");
+    localStorage.removeItem("token");
+    displayView();
+};
+
+changePassword = function(){
+
+    var oldpw = document.getElementById("oldpw").value;
+    var newpw = document.getElementById("newpw").value;
+    var rnewpw = document.getElementById("rnewpw").value;
+    var changePass = validate(newpw, rnewpw);
+    if(changePass === "OK"){
+        var token = localStorage.getItem("token");
+        var returnCode = serverstub.changePassword(token, oldpw, newpw);
+
+        //TODO: Output message to user. Also maybe clear input fields if success == false;
+        console.log("changePass: " + returnCode.message);
+
+    } else {
+        // TODO: Output error to user
+        console.log("changePass error: " + changePass);
+    }
+
+
+
+};
