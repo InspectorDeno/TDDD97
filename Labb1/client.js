@@ -1,10 +1,15 @@
 var passwordLength = 5;
+var sessionToken;
 
 displayView = function(){
 
     if(localStorage.getItem("token") !== null){
-        console.log("token not null");
+        console.log("token not null, token is " + sessionToken);
         document.getElementById("view").innerHTML = document.getElementById("profileview").innerHTML;
+       // Redirect to home screen
+
+        selectTab(document.getElementById("home"));
+        updateUserInfo();
     } else {
         console.log("token is null loading loginView");
         document.getElementById("view").innerHTML = document.getElementById("loginview").innerHTML;
@@ -28,8 +33,8 @@ login = function(){
     if(returnCode.success){
         // Add userToken to local storage
         localStorage.setItem("token", returnCode.data);
+        sessionToken = returnCode.data;
 
-        // TODO Add user to system
         // Display their view
         displayView();
 
@@ -88,9 +93,6 @@ signup = function(){
         document.getElementById("signupError").innerHTML = changePass;
         console.log(changePass);
     }
-
-
-
 };
 
 validate = function(pw, rpw){
@@ -131,7 +133,6 @@ selectTab = function(tab){
             views[j].style.display = "none";
         }
     }
-
 };
 
 signOut = function(){
@@ -158,6 +159,59 @@ changePassword = function(){
         console.log("changePass error: " + changePass);
     }
 
+};
 
+function updateUserInfo(){
+    var userInfo = serverstub.getUserDataByToken(sessionToken);
 
+    var eName = document.createElement("p");
+    var eGender = document.createElement("p");
+    var eCity = document.createElement("p");
+    var eCountry = document.createElement("p");
+     var eEmail = document.createElement("p");
+
+    eName.appendChild(document.createTextNode(userInfo.data.firstname + " " + userInfo.data.familyname));
+    eGender.appendChild(document.createTextNode(userInfo.data.gender));
+    eCity.appendChild(document.createTextNode(userInfo.data.city));
+    eCountry.appendChild(document.createTextNode(userInfo.data.country));
+    eEmail.appendChild(document.createTextNode(userInfo.data.email));
+
+    document.getElementById("userInfoInput").appendChild(eName);
+    document.getElementById("userInfoInput").appendChild(eGender);
+     document.getElementById("userInfoInput").appendChild(eCity);
+      document.getElementById("userInfoInput").appendChild(eCountry);
+      document.getElementById("userInfoInput").appendChild(eEmail);
+    console.log(userInfo);
+
+}
+
+function writePost() {
+    // Get the message
+    var message = document.getElementById("writeMessage").value;
+    console.log(message);
+    // TEMPORARILY show user's own userdata TODO: fix this
+    var userdata = serverstub.getUserDataByToken(sessionToken);
+    document.getElementById("writeMessage").value = "";
+
+    if(message.length !== 0) {
+        // Create a div to append
+        var messageDiv = document.createElement("div");
+        messageDiv.style.wordBreak = "break-all";
+        messageDiv.style.background = "#FF22AD";
+        messageDiv.style.margin = "4px";
+        messageDiv.style.whiteSpace = "pre-line";
+        var theMessage = document.createTextNode(message);
+        messageDiv.appendChild(theMessage);
+        document.getElementById("wall").appendChild(messageDiv);
+
+        serverstub.postMessage(sessionToken, message, userdata.data.email);
+    }
+
+};
+
+function refreshWall() {
+    var userdata = serverstub.getUserDataByToken(sessionToken);
+    var messages = serverstub.getUserMessagesByEmail(sessionToken, userdata.data.email);
+    console.log("refreshing wall");
+    console.log(messages.data);
 };
