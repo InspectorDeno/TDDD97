@@ -196,17 +196,6 @@ function writePost() {
 
 };
 
-function updateUserInfo(email){
-    var userInfo = serverstub.getUserDataByEmail(sessionToken, email);
-
-    document.getElementById("currentName").innerText = userInfo.data.firstname + " " + userInfo.data.familyname;
-    document.getElementById("currentGender").innerText = userInfo.data.gender;
-    document.getElementById("currentCity").innerText = userInfo.data.city;
-    document.getElementById("currentCountry").innerText = userInfo.data.country;
-    document.getElementById("currentEmail").innerText = userInfo.data.email;
-
-};
-
 function refreshWall() {
     // first clear the wall
     var messages = document.getElementById("wall");
@@ -230,8 +219,17 @@ function refreshWall() {
         messageDiv.style.whiteSpace = "pre-line";
         messageDiv.style.webkitTextFillColor = "darkcyan";
 
+        // Pimp name of writer
+        var writer = document.createTextNode(userdata[i].writer + ": \n");
+        var writerStyle = document.createElement("span");
+        writerStyle.style.webkitTextFillColor = "#00494e";
+        writerStyle.style.fontWeight = "bold";
+        writerStyle.appendChild(writer);
 
-        var theMessage = document.createTextNode(userdata[i].writer + ": \n" + userdata[i].content);
+        // Message
+        var theMessage = document.createTextNode(userdata[i].content);
+
+        messageDiv.appendChild(writerStyle);
         messageDiv.appendChild(theMessage);
         document.getElementById("wall").appendChild(messageDiv);
 
@@ -240,12 +238,23 @@ function refreshWall() {
 
 };
 
+function updateUserInfo(email){
+    var userInfo = serverstub.getUserDataByEmail(sessionToken, email);
+
+    document.getElementById("currentName").innerText = userInfo.data.firstname + " " + userInfo.data.familyname;
+    document.getElementById("currentGender").innerText = userInfo.data.gender;
+    document.getElementById("currentCity").innerText = userInfo.data.city;
+    document.getElementById("currentCountry").innerText = userInfo.data.country;
+    document.getElementById("currentEmail").innerText = userInfo.data.email;
+
+};
+
 function findUser() {
     var email = document.getElementById("userToVisit").value;
     var userData = serverstub.getUserDataByEmail(sessionToken, email);
 
     if(userData.success){
-        document.getElementById("homeview").style.display = "inherit";
+        document.getElementById("homeview").style.display = "flex";
         document.getElementById("noUserError").innerText = "";
         currentlyVisiting = email;
         updateUserInfo(currentlyVisiting);

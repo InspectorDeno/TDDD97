@@ -12,6 +12,11 @@ button {
     float: right;
 }
 
+h3{
+    color: rgb(0, 73, 78);
+    margin: 5px 0 12px 0;
+}
+
 #container {
     display: flex;
     flex-direction: row;
@@ -36,6 +41,7 @@ button {
     display: inline-block;
     width: 100%;
     line-height: 140%;
+    margin: 2px 0;
 }
 .accForm input, .accForm select{
     width: 130px;
@@ -61,12 +67,13 @@ button {
 }
 
 #signup {
-    display: block;
+    display: flex;
+    flex-direction: column;
     outline: 3px solid;
     padding: 5px;
     background-color: rgba(173, 216, 230, 0.8);
     flex-grow: 1;
-
+    justify-content: space-evenly;
 }
 
 #profile{
@@ -90,6 +97,8 @@ button {
     background-color: #969c99;
     border: 2px solid;
     text-align: center;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 
 #pcontainer{
@@ -113,24 +122,29 @@ button {
     padding: 10px;
     background: #e0e7e3;
 }
+
 #changePassForm{
     width: 350px;
     line-height: 140%;
 }
+
 #changePassForm label{
     width: 170px;
     float:left;
     height: 20px;
 }
+
 #changePassForm input{
     float: right;
     height: 20px;
     flex-grow: 1;
 }
+
 #signOut{
     flex-grow: 1;
     background: #e0e7e3;
     margin: 0 0 0 10px;
+    padding: 10px;
 }
 
 #signOutButton{
@@ -139,14 +153,17 @@ button {
     float: none;
     background: lightblue;
 }
+
 #userDiv{
     display: flex;
     flex-direction: column;
     width: 250px;
     height: fit-content;
     margin: 0 10px;
+    padding: 5px;
     background: #e0e7e3;
 }
+
 #userInfo{
     display: flex;
     flex-direction: row;
@@ -171,9 +188,11 @@ button {
     width: 100%;
     height: 80px;
 }
+
 #writePostForm button, #postWall button, #changePassForm button{
     margin: 6px 0 0 0;
 }
+
 #postWall{
     background: #e0e7e3;
     padding: 5px;
@@ -188,7 +207,6 @@ button {
 #browseArea{
     background: #e0e7e3;
     padding: 0 10px 10px 10px;
-
 }
 
 .error {

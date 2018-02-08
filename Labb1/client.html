@@ -59,13 +59,13 @@
          <div id="profile">
          <div id="tabs">
              <div id="home" onclick="selectTab(this)" >
-                 <h3>Home</h3>
+                 <h2 style="margin: 12px">Home</h2>
              </div>
              <div id="browse" onclick="selectTab(this)">
-                 <h3>Browse</h3>
+                 <h2 style="margin: 12px">Browse</h2>
              </div>
              <div id="account" onclick="selectTab(this)">
-                 <h3>Account</h3>
+                 <h2 style="margin: 12px">Account</h2>
              </div>
          </div>
              <div id="pcontainer">
@@ -91,7 +91,7 @@
                      </div><br>
                      <div id="homeWall">
                          <div id="writePost">
-                             <h3 align="center">Write message</h3>
+                             <h3 align="center" style="color: rgb(0, 73, 78)">Write Message</h3>
 
                              <form action ="javascript:writePost()" id="writePostForm">
                                  <textarea id="writeMessage" style="resize:none" wrap="off"></textarea>
@@ -110,7 +110,7 @@
                 <div id="browseview" class="pcontent">
                     <div id="browseArea">
                         <h3 align="center"> Search for a user</h3>
-                    <input type="email" id="userToVisit" required>
+                    <input type="email" id="userToVisit">
                        <button onclick="findUser()">Search</button><br><br>
                         <div class="error" id="noUserError"></div>
                     </div>
