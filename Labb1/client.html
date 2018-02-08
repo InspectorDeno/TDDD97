@@ -81,7 +81,11 @@
                                  <p style="font-style: oblique">Email: </p>
                              </div>
                              <div id="userInfoInput">
-
+                                 <p id="currentName"></p>
+                                 <p id="currentGender"></p>
+                                 <p id="currentCity"></p>
+                                 <p id="currentCountry"></p>
+                                 <p id="currentEmail"></p>
                              </div>
                          </div>
                      </div><br>
@@ -91,42 +95,48 @@
 
                              <form action ="javascript:writePost()" id="writePostForm">
                                  <textarea id="writeMessage" style="resize:none" wrap="off"></textarea>
-                                 <button type="submit">Post message</button>
+                                 <button type="submit">Post</button>
                              </form>
                          </div>
                          <div id="postWall">
                              <h3 align="center">Wall</h3>
                              <div id="wall"></div>
-                            <button onclick="refreshWall()">Refresh messages</button>
+                            <button onclick="refreshWall()">Refresh</button>
 
                          </div>
 
                      </div>
                 </div>
                 <div id="browseview" class="pcontent">
-                       <button>BROWSE</button>
+                    <div id="browseArea">
+                        <h3 align="center"> Search for a user</h3>
+                    <input type="email" id="userToVisit" required>
+                       <button onclick="findUser()">Search</button><br><br>
+                        <div class="error" id="noUserError"></div>
+                    </div>
+
                 </div>
-                <div id="accountview" class="pcontent">
+                 <div id="accountview" class="pcontent">
 
-                    <form action ="javascript:changePassword()" id="changePassForm">
-                        <div id="changePassLabel">
-                            <label>Old Password</label><br>
-                            <label>New Password</label><br>
-                            <label>Repeat new Password</label>
-                        </div>
-                        <div id="changePassInput">
-                            <input type="password" id="oldpw" required><br>
-                            <input type="password" id="newpw" required><br>
-                            <input type="password" id="rnewpw" required><br>
-                            <button type ="submit">Change!</button>
-
-                        </div>
-
-                    </form>
-
-                    <button onclick="signOut()" id="signOutButton">Sign out</button>
-                </div>
-         </div>
+                     <div id="changePass">
+                         <h3 style="text-align: center">Change Password</h3>
+                         <form action ="javascript:changePassword()" id="changePassForm">
+                             <label>Old Password</label>
+                             <input type="password" id="oldpw" required><br>
+                             <label>New Password</label>
+                             <input type="password" id="newpw" required><br>
+                             <label>Repeat new Password</label>
+                             <input type="password" id="rnewpw" required><br>
+                             <button type ="submit">Change</button><br>
+                         </form>
+                         <div id="changePassError" class="error"></div>
+                     </div>
+                     <div id="signOut" style="text-align: center">
+                     <h3>Sign Out</h3><br>
+                     <button onclick="signOut()" id="signOutButton">Sign out</button>
+                         </div>
+                 </div>
+             </div>
          </div>
 
      </script>

@@ -95,6 +95,7 @@ button {
 
 #pcontainer{
     display: flex;
+    flex-direction: column-reverse;
     flex-grow: 1;
     background-color: #c7ceca;
     justify-content: center;
@@ -108,27 +109,44 @@ button {
     flex-grow: 1;
 }
 
-#changePassForm{
-    display: flex;
-    flex-direction: row;
-    margin-right: 50px;
+#changePass{
+    display: block;
+    padding: 10px;
+    background: #e0e7e3;
 }
-#changePassLabel{
-    width: 180px;
+#changePassForm{
+    width: 350px;
+    line-height: 140%;
+}
+#changePassForm label{
+    width: 170px;
+    float:left;
+    height: 20px;
+}
+#changePassForm input{
+    float: right;
+    height: 20px;
+    flex-grow: 1;
+}
+#signOut{
+    flex-grow: 1;
+    background: #e0e7e3;
+    margin: 0 0 0 10px;
 }
 
 #signOutButton{
     height: 30px;
     width: 100px;
-    float: bottom;
+    float: none;
+    background: bisque;
 }
 #userDiv{
     display: flex;
     flex-direction: column;
     width: 250px;
     height: fit-content;
-    margin: 0 5px;
-    background: antiquewhite;
+    margin: 0 10px;
+    background: #e0e7e3;
 }
 #userInfo{
     display: flex;
@@ -145,19 +163,33 @@ button {
 }
 
 #writePost{
-    background: darkmagenta;
-    margin: 0 0 5px 0;
+    background: #e0e7e3;
+    margin: 0 0 10px 0;
+    padding: 5px;
 }
+
 #writePostForm textarea{
     width: 100%;
     height: 120px;
 }
-#postWall{
-    background: #5589d3;
+#writePostForm button, #postWall button, #changePassForm button{
+    margin: 6px 0 0 0;
 }
+#postWall{
+    background: #e0e7e3;
+    padding: 5px;
+}
+
 #wall{
-        overflow: overlay;
-    max-height: 500px;
+    overflow: overlay;
+    max-height: 400px;
+    margin: 0 -25px 0 0;
+}
+
+#browseArea{
+    background: #e0e7e3;
+    padding: 0 10px 10px 10px;
+
 }
 
 .error {

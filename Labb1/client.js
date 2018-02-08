@@ -1,15 +1,14 @@
 var passwordLength = 5;
-var sessionToken;
+var sessionToken = null;
+var currentlyVisiting;
 
 displayView = function(){
 
-    if(localStorage.getItem("token") !== null){
+    if(sessionToken !== null){
         console.log("token not null, token is " + sessionToken);
         document.getElementById("view").innerHTML = document.getElementById("profileview").innerHTML;
-       // Redirect to home screen
-
+        // Redirect to home screen
         selectTab(document.getElementById("home"));
-        updateUserInfo();
     } else {
         console.log("token is null loading loginView");
         document.getElementById("view").innerHTML = document.getElementById("loginview").innerHTML;
@@ -37,6 +36,8 @@ login = function(){
 
         // Display their view
         displayView();
+        currentlyVisiting = email;
+        updateUserInfo(currentlyVisiting);
 
     } else {
         document.getElementById("signinError").innerHTML += returnCode.message;
@@ -46,9 +47,19 @@ login = function(){
 
     // For now...
     console.log(returnCode.message);
-
-
 };
+
+autoLogin = function (email, password) {
+        var returnCode = serverstub.signIn(email, password);
+
+        localStorage.setItem("token", returnCode.data);
+        sessionToken = returnCode.data;
+
+        // Display their view
+        displayView();
+        currentlyVisiting = email;
+        updateUserInfo(currentlyVisiting);
+}
 
 
 signup = function(){
@@ -81,15 +92,13 @@ signup = function(){
         var returnCode = serverstub.signUp(theUser);
 
         if(returnCode.success){
-            displayView();
+            autoLogin(email, password);
         } else {
             console.log(returnCode.message);
             document.getElementById("signupError").innerHTML = returnCode.message;
-            // TODO: Output server error
         }
 
     } else {
-        // TODO: Return error message
         document.getElementById("signupError").innerHTML = changePass;
         console.log(changePass);
     }
@@ -128,6 +137,11 @@ selectTab = function(tab){
         if(views[j].id === tab.id+"view"){
             // set the correct view to be displayed
             views[j].style.display = "flex";
+            if(views[j].id === "homeview"){
+                currentlyVisiting = serverstub.getUserDataByToken(sessionToken).data.email;
+                updateUserInfo(currentlyVisiting);
+                refreshWall();
+            }
         } else {
             // the other ones are hidden
             views[j].style.display = "none";
@@ -138,6 +152,7 @@ selectTab = function(tab){
 signOut = function(){
     console.log("signing out. removing token...");
     localStorage.removeItem("token");
+    sessionToken = null;
     displayView();
 };
 
@@ -153,65 +168,91 @@ changePassword = function(){
 
         //TODO: Output message to user. Also maybe clear input fields if success == false;
         console.log("changePass: " + returnCode.message);
+                    document.getElementById("changePassError").innerText = returnCode.message;
+
 
     } else {
-        // TODO: Output error to user
+        // Output error to user, passwords don't match
+        document.getElementById("changePassError").innerText = changePass;
+
         console.log("changePass error: " + changePass);
     }
 
 };
 
-function updateUserInfo(){
-    var userInfo = serverstub.getUserDataByToken(sessionToken);
-
-    var eName = document.createElement("p");
-    var eGender = document.createElement("p");
-    var eCity = document.createElement("p");
-    var eCountry = document.createElement("p");
-     var eEmail = document.createElement("p");
-
-    eName.appendChild(document.createTextNode(userInfo.data.firstname + " " + userInfo.data.familyname));
-    eGender.appendChild(document.createTextNode(userInfo.data.gender));
-    eCity.appendChild(document.createTextNode(userInfo.data.city));
-    eCountry.appendChild(document.createTextNode(userInfo.data.country));
-    eEmail.appendChild(document.createTextNode(userInfo.data.email));
-
-    document.getElementById("userInfoInput").appendChild(eName);
-    document.getElementById("userInfoInput").appendChild(eGender);
-     document.getElementById("userInfoInput").appendChild(eCity);
-      document.getElementById("userInfoInput").appendChild(eCountry);
-      document.getElementById("userInfoInput").appendChild(eEmail);
-    console.log(userInfo);
-
-}
-
 function writePost() {
     // Get the message
     var message = document.getElementById("writeMessage").value;
-    console.log(message);
-    // TEMPORARILY show user's own userdata TODO: fix this
-    var userdata = serverstub.getUserDataByToken(sessionToken);
+
+    // Our name to display in message
+    var myUserdata = serverstub.getUserDataByToken(sessionToken);
+    var name = myUserdata.data.firstname + " " + myUserdata.data.familyname;
+    // Clear message box
     document.getElementById("writeMessage").value = "";
 
     if(message.length !== 0) {
-        // Create a div to append
-        var messageDiv = document.createElement("div");
-        messageDiv.style.wordBreak = "break-all";
-        messageDiv.style.background = "#FF22AD";
-        messageDiv.style.margin = "4px";
-        messageDiv.style.whiteSpace = "pre-line";
-        var theMessage = document.createTextNode(message);
-        messageDiv.appendChild(theMessage);
-        document.getElementById("wall").appendChild(messageDiv);
-
-        serverstub.postMessage(sessionToken, message, userdata.data.email);
+        serverstub.postMessage(sessionToken, message, currentlyVisiting);
+        refreshWall();
     }
 
 };
 
-function refreshWall() {
-    var userdata = serverstub.getUserDataByToken(sessionToken);
-    var messages = serverstub.getUserMessagesByEmail(sessionToken, userdata.data.email);
-    console.log("refreshing wall");
-    console.log(messages.data);
+function updateUserInfo(email){
+    var userInfo = serverstub.getUserDataByEmail(sessionToken, email);
+
+    document.getElementById("currentName").innerText = userInfo.data.firstname + " " + userInfo.data.familyname;
+    document.getElementById("currentGender").innerText = userInfo.data.gender;
+    document.getElementById("currentCity").innerText = userInfo.data.city;
+    document.getElementById("currentCountry").innerText = userInfo.data.country;
+    document.getElementById("currentEmail").innerText = userInfo.data.email;
+
 };
+
+function refreshWall() {
+    // first clear the wall
+    var messages = document.getElementById("wall");
+    while(messages.firstChild){
+        messages.removeChild(messages.firstChild);
+    }
+
+    var userdata = serverstub.getUserMessagesByEmail(sessionToken, currentlyVisiting).data;
+    console.log("refreshing wall");
+    console.log(userdata);
+
+    for(var i=0; i < userdata.length; i++)
+    {
+        // Create a messageDiv to append
+        var messageDiv = document.createElement("div");
+        messageDiv.className = "wallPost";
+        messageDiv.style.wordBreak = "break-all";
+        messageDiv.style.background = "rgba(198, 106, 26, 0.16)";
+        messageDiv.style.margin = "4px 25px 4px 0";
+        messageDiv.style.padding = "3px";
+        messageDiv.style.whiteSpace = "pre-line";
+        messageDiv.style.webkitTextFillColor = "#9C4E1A";
+
+
+        var theMessage = document.createTextNode(userdata[i].writer + ": \n" + userdata[i].content);
+        messageDiv.appendChild(theMessage);
+        document.getElementById("wall").appendChild(messageDiv);
+
+
+    }
+
+};
+
+function findUser() {
+    var email = document.getElementById("userToVisit").value;
+    var userData = serverstub.getUserDataByEmail(sessionToken, email);
+
+    if(userData.success){
+        document.getElementById("homeview").style.display = "inherit";
+        document.getElementById("noUserError").innerText = "";
+        currentlyVisiting = email;
+        updateUserInfo(currentlyVisiting);
+        refreshWall();
+    } else {
+        document.getElementById("noUserError").innerText = userData.message;
+        console.log("lol no friends");
+    }
+}
