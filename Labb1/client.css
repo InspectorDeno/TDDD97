@@ -3,7 +3,6 @@ body {
 
     font-family: "Trebuchet MS";
     background-image: url("tree.jpg");
-    height: 100%;
     background-position: bottom;
     background-repeat: no-repeat;
     background-size: cover;
@@ -58,14 +57,14 @@ button {
     outline: 3px solid;
     margin-bottom: 10px;
     padding: 5px;
-    background-color: rgba(198, 106, 26, 0.76);
+    background-color: rgba(173, 216, 230, 0.8);
 }
 
 #signup {
     display: block;
     outline: 3px solid;
     padding: 5px;
-    background-color: rgba(198, 106, 26, 0.76);
+    background-color: rgba(173, 216, 230, 0.8);
     flex-grow: 1;
 
 }
@@ -75,7 +74,7 @@ button {
     flex-direction: column;
     margin: 0 auto;
     width: 800px;
-    background-color: rgba(198, 106, 26, 0.76);
+    background-color: rgba(173, 216, 230, 0.8);
 }
 
 #tabs{
@@ -105,7 +104,7 @@ button {
 
 .pcontent{
     justify-content: center;
-    margin: 50px 30px 30px 30px;
+    margin: 40px 30px 30px 30px;
     flex-grow: 1;
 }
 
@@ -138,7 +137,7 @@ button {
     height: 30px;
     width: 100px;
     float: none;
-    background: bisque;
+    background: lightblue;
 }
 #userDiv{
     display: flex;
@@ -170,7 +169,7 @@ button {
 
 #writePostForm textarea{
     width: 100%;
-    height: 120px;
+    height: 80px;
 }
 #writePostForm button, #postWall button, #changePassForm button{
     margin: 6px 0 0 0;
@@ -182,7 +181,7 @@ button {
 
 #wall{
     overflow: overlay;
-    max-height: 400px;
+    max-height: 306px;
     margin: 0 -25px 0 0;
 }
 
@@ -194,7 +193,6 @@ button {
 
 .error {
     color: red;
-    font-weight: bold;
     width: 100%;
     font-size: 14px;
 }

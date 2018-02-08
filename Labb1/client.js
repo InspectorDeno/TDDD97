@@ -40,9 +40,8 @@ login = function(){
         updateUserInfo(currentlyVisiting);
 
     } else {
-        document.getElementById("signinError").innerHTML += returnCode.message;
+        document.getElementById("signinError").innerHTML = returnCode.message;
         console.log(returnCode.message);
-        // TODO:Display error "returnCode.message"
     }
 
     // For now...
@@ -225,11 +224,11 @@ function refreshWall() {
         var messageDiv = document.createElement("div");
         messageDiv.className = "wallPost";
         messageDiv.style.wordBreak = "break-all";
-        messageDiv.style.background = "rgba(198, 106, 26, 0.16)";
+        messageDiv.style.background = "rgba(173, 216, 230, 0.5)";
         messageDiv.style.margin = "4px 25px 4px 0";
         messageDiv.style.padding = "3px";
         messageDiv.style.whiteSpace = "pre-line";
-        messageDiv.style.webkitTextFillColor = "#9C4E1A";
+        messageDiv.style.webkitTextFillColor = "darkcyan";
 
 
         var theMessage = document.createTextNode(userdata[i].writer + ": \n" + userdata[i].content);
