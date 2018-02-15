@@ -15,7 +15,7 @@
         </div>
         <div id="accountArea">
             <div id="signin">
-                <form action="javascript:login();">
+                <form action="javascript:login();" class="accForm">
                     <label for="email">Email</label>
                     <input type="email" name="email" id="email" required/><br>
                     <label for="password">Password</label>
@@ -26,7 +26,7 @@
             </div>
             <div id="signup">
                 <h3 align="center">Sign up here</h3>
-                <form action="javascript:signup();">
+                <form action="javascript:signup();" class="accForm">
                     <label>First Name</label>
                     <input type="text" name="signup-firstName" id="signup-firstName" required><br>
                     <label>Family Name</label>
@@ -55,44 +55,88 @@
     </div>
     </script>
 
-    <script type="text/html" id="profileview">
+    <script type="text/view" id="profileview">
          <div id="profile">
          <div id="tabs">
-            <div id="home" onclick="selectTab(this)" >
-            <h3>Home</h3>
-            </div>
-            <div id="browse" onclick="selectTab(this)">
-            <h3>Browse</h3>
-            </div>
-            <div id="account" onclick="selectTab(this)">
-            <h3>Account</h3>
-            </div>
-            </div>
-            <div id="pcontainer">
-                <div id="homeview" class="pcontent">
-                    <button>HAHA</button>
-                    <button>HOME</button>
+             <div id="home" onclick="selectTab(this)" >
+                 <h2 style="margin: 12px">Home</h2>
+             </div>
+             <div id="browse" onclick="selectTab(this)">
+                 <h2 style="margin: 12px">Browse</h2>
+             </div>
+             <div id="account" onclick="selectTab(this)">
+                 <h2 style="margin: 12px">Account</h2>
+             </div>
+         </div>
+             <div id="pcontainer">
+                 <div id="homeview" class="pcontent">
+                     <div id="userDiv">
+                         <h3 align="center">User Info</h3>
+                         <div id="userInfo">
+                             <div id="userInfoLabels">
+                                 <p style="font-style: oblique">Name: </p>
+                                 <p style="font-style: oblique">Gender: </p>
+                                 <p style="font-style: oblique">City: </p>
+                                 <p style="font-style: oblique">Country: </p>
+                                 <p style="font-style: oblique">Email: </p>
+                             </div>
+                             <div id="userInfoInput">
+                                 <p id="currentName"></p>
+                                 <p id="currentGender"></p>
+                                 <p id="currentCity"></p>
+                                 <p id="currentCountry"></p>
+                                 <p id="currentEmail"></p>
+                             </div>
+                         </div>
+                     </div><br>
+                     <div id="homeWall">
+                         <div id="writePost">
+                             <h3 align="center" style="color: rgb(0, 73, 78)">Write Message</h3>
+
+                             <form action ="javascript:writePost()" id="writePostForm">
+                                 <textarea id="writeMessage" style="resize:none" wrap="off"></textarea>
+                                 <button type="submit">Post</button>
+                             </form>
+                         </div>
+                         <div id="postWall">
+                             <h3 align="center">Wall</h3>
+                             <div id="wall"></div>
+                            <button onclick="refreshWall()">Refresh</button>
+
+                         </div>
+
+                     </div>
                 </div>
                 <div id="browseview" class="pcontent">
-                    <button>HAHA</button>
-                    <button>BROWSE</button>
-                </div>
-                <div id="accountview" class="pcontent">
-
-                    <div id="changepassword">
-                    <form action ="javascript:changePassword()">
-                        <label>Old Password</label>
-                        <input type="password" id="oldpw" required>
-                        <label>New Password</label>
-                        <input type="password" id="newpw" required>
-                         <label>Repeat new Password</label>
-                        <input type="password" id="rnewpw" required>
-                        <button type ="submit">Change!</button>
-                    </form>
+                    <div id="browseArea">
+                        <h3 align="center"> Search for a user</h3>
+                    <input type="email" id="userToVisit">
+                       <button onclick="findUser()">Search</button><br><br>
+                        <div class="error" id="noUserError"></div>
                     </div>
-                    <button onclick="signOut()" >Sign out</button>
+
                 </div>
-         </div>
+                 <div id="accountview" class="pcontent">
+
+                     <div id="changePass">
+                         <h3 style="text-align: center">Change Password</h3>
+                         <form action ="javascript:changePassword()" id="changePassForm">
+                             <label>Old Password</label>
+                             <input type="password" id="oldpw" required><br>
+                             <label>New Password</label>
+                             <input type="password" id="newpw" required><br>
+                             <label>Repeat new Password</label>
+                             <input type="password" id="rnewpw" required><br>
+                             <button type ="submit">Change</button><br>
+                         </form>
+                         <div id="changePassError" class="error"></div>
+                     </div>
+                     <div id="signOut" style="text-align: center">
+                     <h3>Sign Out</h3><br>
+                     <button onclick="signOut()" id="signOutButton">Sign out</button>
+                         </div>
+                 </div>
+             </div>
          </div>
 
      </script>

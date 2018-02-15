@@ -3,31 +3,18 @@ body {
 
     font-family: "Trebuchet MS";
     background-image: url("tree.jpg");
-    height: 100%;
     background-position: bottom;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
-form{
-    display: block;
-    width: 100%;
-    line-height: 150%;
-}
-label{
-    float:left;
-    width: 100px;
-}
-input, select{
-    width: 140px;
+button {
     float: right;
-}
-select{
-    height: 22px;
 }
 
-button{
-    float: right;
+h3{
+    color: rgb(0, 73, 78);
+    margin: 5px 0 12px 0;
 }
 
 #container {
@@ -46,27 +33,47 @@ button{
     display: flex;
     flex-direction: column;
     margin-left: 10px;
-    width: 250px;
     height: 400px;
-    justify-content: space-evenly;
+    width: 250px;
+}
+
+.accForm{
+    display: inline-block;
+    width: 100%;
+    line-height: 140%;
+    margin: 2px 0;
+}
+.accForm input, .accForm select{
+    width: 130px;
+    float: right;
+    height: 19px;
+}
+
+.accForm button{
+    width: 80px;
+    float: right;
+}
+
+.accForm label {
+    width: 100px;
+    float: left;
 }
 
 #signin {
     outline: 3px solid;
     margin-bottom: 10px;
     padding: 5px;
-    background-color: rgba(198, 106, 26, 0.76);
+    background-color: rgba(173, 216, 230, 0.8);
 }
 
 #signup {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    justify-content: stretch;
     outline: 3px solid;
     padding: 5px;
-    background-color: rgba(198, 106, 26, 0.76);
-
+    background-color: rgba(173, 216, 230, 0.8);
+    flex-grow: 1;
+    justify-content: space-evenly;
 }
 
 #profile{
@@ -74,14 +81,13 @@ button{
     flex-direction: column;
     margin: 0 auto;
     width: 800px;
-    height: 100%;
-    background-color: rgba(198, 106, 26, 0.76);
-
+    background-color: rgba(173, 216, 230, 0.8);
 }
 
 #tabs{
     display: flex;
     justify-content: center;
+    z-index: 1;
 }
 
 #home, #browse, #account {
@@ -91,34 +97,120 @@ button{
     background-color: #969c99;
     border: 2px solid;
     text-align: center;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
-
 
 #pcontainer{
     display: flex;
-    width: 100%;
-    height: 100%;
+    flex-direction: column-reverse;
+    flex-grow: 1;
     background-color: #c7ceca;
     justify-content: center;
+    margin: 0 20px 20px 20px;
+    outline: 2px solid;
 }
 
 .pcontent{
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-    width: 80%;
     justify-content: center;
+    margin: 40px 30px 30px 30px;
+    flex-grow: 1;
 }
 
-#changepassword{
+#changePass{
+    display: block;
+    padding: 10px;
+    background: #e0e7e3;
+}
+
+#changePassForm{
+    width: 350px;
+    line-height: 140%;
+}
+
+#changePassForm label{
+    width: 170px;
+    float:left;
+    height: 20px;
+}
+
+#changePassForm input{
+    float: right;
+    height: 20px;
+    flex-grow: 1;
+}
+
+#signOut{
+    flex-grow: 1;
+    background: #e0e7e3;
+    margin: 0 0 0 10px;
+    padding: 10px;
+}
+
+#signOutButton{
+    height: 30px;
+    width: 100px;
+    float: none;
+    background: lightblue;
+}
+
+#userDiv{
     display: flex;
     flex-direction: column;
-    width: 200px;
+    width: 250px;
+    height: fit-content;
+    margin: 0 10px;
+    padding: 5px;
+    background: #e0e7e3;
+}
+
+#userInfo{
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: space-evenly;
+}
+
+#homeWall{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 400px;
+}
+
+#writePost{
+    background: #e0e7e3;
+    margin: 0 0 10px 0;
+    padding: 5px;
+}
+
+#writePostForm textarea{
+    width: 100%;
+    height: 80px;
+}
+
+#writePostForm button, #postWall button, #changePassForm button{
+    margin: 6px 0 0 0;
+}
+
+#postWall{
+    background: #e0e7e3;
+    padding: 5px;
+}
+
+#wall{
+    overflow: overlay;
+    max-height: 306px;
+    margin: 0 -25px 0 0;
+}
+
+#browseArea{
+    background: #e0e7e3;
+    padding: 0 10px 10px 10px;
 }
 
 .error {
     color: red;
-    font-weight: bold;
     width: 100%;
     font-size: 14px;
 }
