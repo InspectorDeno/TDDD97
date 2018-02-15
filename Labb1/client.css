@@ -47,6 +47,8 @@ button{
     flex-direction: column;
     margin-left: 10px;
     width: 250px;
+    height: 400px;
+    justify-content: space-evenly;
 }
 
 #signin {
@@ -60,6 +62,7 @@ button{
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    justify-content: stretch;
     outline: 3px solid;
     padding: 5px;
     background-color: rgba(198, 106, 26, 0.76);
