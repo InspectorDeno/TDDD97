@@ -18,7 +18,6 @@ displayView = function(){
 
 
 window.onload = function(){
-    // TODO:Temporary lol until logout
     displayView();
 };
 
@@ -237,6 +236,7 @@ function refreshWall() {
     }
 
 };
+
 
 function updateUserInfo(email){
     var userInfo = serverstub.getUserDataByEmail(sessionToken, email);
