@@ -44,12 +44,12 @@ def socket():
 
                 except TypeError:
                     print("didn't get a JSON")
-                    return
+                    return ""
 
             except WebSocketError:
                 print("failed I guess")
                 break
-    return
+    return ""
 
 
 @app.route('/signup', methods=['POST'])

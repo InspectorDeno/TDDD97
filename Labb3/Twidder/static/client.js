@@ -1,30 +1,24 @@
 var passwordLength = 5;
 var sessionToken = null;
 var currentlyVisiting;
-//var socket = new WebSocket('ws://localhost:5000/socket');
+var ws;
 
 
 window.onload = function(){
     displayView();
 };
 
+// Close socket if window unloads
 window.onbeforeunload = function() {
-//    socket.send('close connection');
-//    socket.close();
+    if(ws !== undefined){
+        console.log("closing socket...");
+        ws.onclose = function () {};
+        ws.close();
+    } else {
+        console.log("Socket was undefined..")
+    }
 };
 
-//socket.onopen = function () {
- //   var token = localStorage.getItem('sessionToken');
- //   if (token !== null && token !== 'undefined'){
- //       socket.send(token);
-        // Listens for incoming data from server
-//        socket.onmessage = function (ev) {
-//            if(ev.data === 'signout'){
-//                signOut();
-//            }
-//        }
-//    }
-//};
 
 displayView = function(){
 
@@ -53,13 +47,7 @@ login = function(){
             localStorage.setItem("token", response.data);
             sessionToken = response.data;
 
-            // Check if user is already logged in
-//            socket.send(sessionToken);
-//            socket.onmessage = function (ev) {
-//                if(ev.data === 'signout'){
-//                    signOut();
-//                }
-//            };
+            // Send token over socket to log out potential older session
             webSocketConnect(sessionToken);
 
             // Display their view
@@ -363,7 +351,7 @@ function webSocketConnect(token) {
     ws.onmessage = function (ev) {
         var response = JSON.parse(ev.data);
         if(response.type === "signout"){
-            console.log("Hey, login out")
+            console.log("Hey, logging out")
             signOut();
         }
     };
