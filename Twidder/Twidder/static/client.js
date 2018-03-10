@@ -341,7 +341,7 @@ generateCharts = function () {
         options: {
             title: {
                 display: true,
-                text: 'Gender distribution'
+                text: 'Gender distribution of users'
             },
             legend: {
                 display: false
@@ -384,7 +384,7 @@ generateCharts = function () {
         options: {
             title: {
                 display: true,
-                text: 'Message distribution'
+                text: 'Best friends by message count'
             },
             legend: {
                 display: false
