@@ -3,6 +3,13 @@ from flask import g
 
 DATABASE = 'database.db'
 
+# For overriding row_factory attribute and lets us dump select statements to JSON
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
 
 def connect():
     return sqlite3.connect(DATABASE)
@@ -163,6 +170,37 @@ def post_message(info):
         return True
     except:
         return False
+
+
+def get_stats(*usr):
+    db = get_db()
+    # For generating JSON Docs from the SQLite
+    db.row_factory = dict_factory
+    cur = db.cursor()
+    try:
+        cur.execute('SELECT gender, COUNT(*) AS count FROM users GROUP BY gender;')
+        gender_stats = cur.fetchall()
+        cur.execute('SELECT (SELECT COUNT(*) FROM users) AS total, '
+                    '(SELECT COUNT(*) FROM logged_in_users) AS logged_in')
+        login_stats = cur.fetchall()
+        if len(usr) > 0:
+            user = (usr[0],)
+            cur.execute('SELECT from_user, COUNT(*) AS count FROM messages'
+                        ' WHERE to_user = ? GROUP BY from_user', user)
+            message_stats = cur.fetchall()
+            json = {'gender_stats': gender_stats,
+                    'login_stats': login_stats,
+                    'message_stats': message_stats}
+        else:
+            json = {'gender_stats': gender_stats,
+                    'login_stats': login_stats
+                    }
+        # print json
+        return json
+    except:
+        print len(usr)
+        return None
+
 
 def close():
     get_db().close()

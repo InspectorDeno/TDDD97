@@ -4,88 +4,109 @@ from geventwebsocket import WebSocketError
 import database_helper
 import uuid
 import json
-
 clients = {}
 
 
 @app.route('/', methods=['GET'])
 def welcome_view():
-    print("redirecting...")
     return app.send_static_file('client.html')
 
 
-@app.route('/socket')
+@app.route('/socket-api')
 def socket():
     if request.environ.get('wsgi.websocket'):
         ws = request.environ['wsgi.websocket']
         while True:
             try:
                 message = ws.receive()
-                try:
-                    message = json.loads(message)
+                if message is not None:
+                    try:
+                        message = json.loads(message)
+                        if message["type"] == "login":
+                            token = message["data"]
+                            user = database_helper.get_email(token)
+                            # We want to log out any previous sessions
+                            if user is not None:
+                                if user in clients:
+                                    print("Telling previous user to leave")
+                                    msg = {"type": "signout"}
+                                    clients[user].send(json.dumps(msg))
 
-                    if message["type"] == "login":
-                        token = message["data"]
-                        user = database_helper.get_email(token)
-                    # if user already has a connection, send 'signout'
-                        if user in clients:
-                            data = {"type": "signout"}
-                            clients[user].send(json.dumps(data))
-                    # update clients with new user
-                        clients[user] = ws
+                                clients[user] = ws
+                            # User is None, sign them out anyways
+                            else:
+                                msg = {"type": "signout"}
+                                ws.send(json.dumps(msg))
 
-                        print "new client logged in..."
-                        for client in clients:
-                            print(client)
-                    if message["type"] == "stats":
+                            print(">> Active clients:")
+                            for client in clients:
+                                print(client)
 
-                        # Send data to client
-                        print "Client requested data";
+                        if message["type"] == "get-stats":
+                            token = message["data"]
+                            email = database_helper.get_email(token)
+                            send_stats(False, email)
 
-                except TypeError:
-                    print("didn't get a JSON")
-                    return
+                    except TypeError as te:
+                        print te
+                        return ""
+                else:
+                    # Message is None
+                    break
 
-            except WebSocketError:
-                print("failed I guess")
+            except WebSocketError, e:
+                print "Connection closed..."
+                print e
                 break
-    return
+
+        print("Closing socket...")
+        for user, s in clients.items():
+            if ws == s:
+                # Remove socket
+                del clients[user]
+        return ""
+
+    return ""
 
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    data = {'email': request.form['email'],
-            'password': request.form['password'],
-            'firstname': request.form['firstname'],
-            'familyname': request.form['familyname'],
-            'gender': request.form['gender'],
-            'city': request.form['city'],
-            'country': request.form['country']
+    req = request.get_json(force=True)
+    data = {'email': req['email'],
+            'password': req['password'],
+            'firstname': req['firstname'],
+            'familyname': req['familyname'],
+            'gender': req['gender'],
+            'city': req['city'],
+            'country': req['country']
             }
-
     # Validate
     if not fields_filled_in(data):
         return jsonify(success=False, message="All fields must be filled in")
     # Check length
     if not validate(data['password']):
-        return jsonify(success=False, message="Password must be at least 225 characters long")
+        return jsonify(success=False, message="Password must be at least 5 characters long")
     # Try add user
     if not (database_helper.add_user(data)):
         return jsonify(success=False, message="User already exists")
     # User successfully added
+    # Send stats to all users
+    send_stats(True)
     return jsonify(success=True, message="User added!")
 
 
 @app.route('/signin', methods=['POST'])
 def signin():
-    email = request.form['email']
-    password = request.form['password']
-
+    req = request.get_json(force=True)
+    email = req['email']
+    password = req['password']
     # See if user exists in database
     if database_helper.find_user(email, password):
         token = uuid.uuid4().hex
         # Add user to logged in users
         if database_helper.login_user(email, token):
+            # Send stats to all users
+            send_stats(True)
             return jsonify(success=True, message="Login successful!", data=token)
         else:
             # Shouldn't happen
@@ -96,19 +117,22 @@ def signin():
 
 @app.route('/signout', methods=['POST'])
 def signout():
-    token = request.form['token']
+    req = request.get_json(force=True)
+    token = req['token']
     # Get the email associated with the token, and delete
     user = database_helper.get_email(token)
+    print ("signing out user..")
 
     if user is not None:
         if clients.get(user) is not None:
             del clients[user]
-            print "removed client..."
+            print("3: Current clients:")
             for client in clients:
                 print(client)
 
     if database_helper.signout_user(token):
-
+        # Send stats to all users
+        send_stats(True)
         return jsonify(success=True, message="Logout successful!")
     else:
         return jsonify(success=False, message="Failed to log out user!")
@@ -116,9 +140,10 @@ def signout():
 
 @app.route('/change-password', methods=['POST'])
 def change_password():
-    token = request.form['token']
-    old_password = request.form['old_password']
-    new_password = request.form['new_password']
+    req = request.get_json(force=True)
+    token = req['token']
+    old_password = req['old_password']
+    new_password = req['new_password']
 
     # First see if passwords differ
     if old_password == new_password:
@@ -139,16 +164,6 @@ def change_password():
         return jsonify(success=False, message="Failed to change password!")
 
     return jsonify(success=True, message="Password successfully changed!")
-
-
-@app.route('/is-signed-in', methods=['GET'])
-def is_signed_in():
-    print "checking if signed in..."
-    token = request.args.get('token')
-    email = database_helper.get_email(token)
-    if email is None:
-        return jsonify(success=False, message="Not logged in!")
-    return jsonify(success=True, message="User logged in")
 
 
 @app.route('/get-user-data-by-token/', methods=['GET'])
@@ -228,17 +243,17 @@ def get_user_messages_by_email():
 
 @app.route('/post-message', methods=['POST'])
 def post_message():
-
-    token = request.form['token']
+    req = request.get_json(force=True)
+    token = req['token']
     # Make sure token is valid
     from_user = database_helper.get_email(token)
     if from_user is None:
         return jsonify(success=False, message="Log in to post a message!")
 
     message_info = {
-        'message': request.form['message'],
+        'message': req['message'],
         'from_user': from_user,
-        'to_user': request.form['email']
+        'to_user': req['email']
     }
 
     print message_info
@@ -246,6 +261,7 @@ def post_message():
     if not database_helper.post_message(message_info):
         return jsonify(success=False, message="Failed to post message!")
 
+    send_stats(False, message_info['to_user'])
     return jsonify(success=True, message="Message posted!")
 
 
@@ -260,6 +276,28 @@ def validate(password):
     if len(password) < 5:
         return False
     return True
+
+
+def send_stats(to_all, *args):
+    # Send data to client
+    if len(args) > 0:
+
+        stats = database_helper.get_stats(args[0])
+    else:
+        stats = database_helper.get_stats()
+
+    msg = {
+        "type": "get-stats",
+        "data": stats
+    }
+
+    # Send data to all users
+    if to_all:
+        for client in clients:
+            clients[client].send(json.dumps(msg))
+    # Only send to current client
+    else:
+        clients[args[0]].send(json.dumps(msg))
 
 
 if __name__ == '__main__':

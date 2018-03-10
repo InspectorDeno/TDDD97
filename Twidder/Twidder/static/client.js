@@ -1,97 +1,82 @@
 var passwordLength = 5;
-var sessionToken = null;
 var currentlyVisiting;
-//var socket = new WebSocket('ws://localhost:5000/socket');
-
+var chartColors = [
+  '#2cbfd5',
+  '#95c42a',
+  '#fe6d7d',
+  '#c0bcb6',
+  '#d7d013'
+];
 
 window.onload = function(){
+    webSocketConnect();
     displayView();
 };
 
 window.onbeforeunload = function() {
-//    socket.send('close connection');
-//    socket.close();
+    if(ws !== undefined) {
+        console.log("closing socket...");
+        ws.onclose = function (){}; // disable onclose handler first
+        ws.close();
+    } else {
+        console.log("Socket was undefined...");
+    }
 };
-
-//socket.onopen = function () {
- //   var token = localStorage.getItem('sessionToken');
- //   if (token !== null && token !== 'undefined'){
- //       socket.send(token);
-        // Listens for incoming data from server
-//        socket.onmessage = function (ev) {
-//            if(ev.data === 'signout'){
-//                signOut();
-//            }
-//        }
-//    }
-//};
 
 displayView = function(){
 
-    if(sessionToken !== null){
+    var token = localStorage.getItem("token");
+    if(token !== null) {
+        // User has ongoing session
         document.getElementById("view").innerHTML = document.getElementById("profileview").innerHTML;
         // Redirect to home screen
         selectTab(document.getElementById("home"));
-    } else {
-        console.log("token is null loading loginView");
+    }
+    else {
+        console.log("Token was null...");
         document.getElementById("view").innerHTML = document.getElementById("loginview").innerHTML;
     }
 };
 
 login = function(){
+    var email;
+    var password;
 
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
+    // For auto-login after signup
+    if(arguments.length !== 0){
+        email = arguments[0];
+        password = arguments[1];
+    } else {
+        email = document.getElementById("email").value;
+        password = document.getElementById("password").value;
+    }
 
-    var params = "email="+email+"&password="+password;
+    var params = {
+        "email": email,
+        "password": password
+    };
 
     sendPOSTRequest("/signin", params, function (response) {
 
         if(response.success){
 
             // Add userToken to local storage
-            localStorage.setItem("token", response.data);
-            sessionToken = response.data;
+            var sessionToken = response.data;
+            localStorage.setItem("token", sessionToken);
 
-            // Check if user is already logged in
-//            socket.send(sessionToken);
-//            socket.onmessage = function (ev) {
-//                if(ev.data === 'signout'){
-//                    signOut();
-//                }
-//            };
-
-            // Display their view
+            // Send login info over socket
+            console.log("token: " + sessionToken);
             currentlyVisiting = email;
+            // Send login information via socket
+            webSocketConnect();
             displayView();
+
         } else {
             document.getElementById("signinError").innerHTML = response.message;
             console.log(response.message);
         }
-    })
+    });
 };
-
-autoLogin = function (email, password) {
-
-    var params = "email="+email+"&password="+password;
-    sendPOSTRequest("/signin", params, function (response) {
-
-        if(response.success){
-
-            // Add userToken to local storage
-            localStorage.setItem("token", response.data);
-            sessionToken = response.data;
-
-            // Display their view
-            displayView();
-            currentlyVisiting = email;
-        } else {
-            document.getElementById("signinError").innerHTML = response.message;
-            console.log(response.message);
-        }
-    })
-};
-
 
 signup = function(){
 
@@ -124,17 +109,18 @@ signup = function(){
             "country": country
         };
 
-        var params = "email=" + theUser.email +
-            "&password=" + theUser.password +
-            "&firstname=" + theUser.firstname +
-            "&familyname=" + theUser.familyname +
-            "&gender=" + theUser.gender +
-            "&city=" + theUser.city +
-            "&country=" + theUser.country;
+        var params = {"email": theUser.email,
+            "password": theUser.password,
+            "firstname": theUser.firstname,
+            "familyname": theUser.familyname,
+            "gender": theUser.gender,
+            "city": theUser.city,
+            "country": theUser.country
+        };
 
         sendPOSTRequest("/signup", params, function (response) {
             if (response.success) {
-                autoLogin(email, password);
+                login(email, password);
             } else {
                 document.getElementById("signupError").innerHTML = response.message;
             }
@@ -177,6 +163,7 @@ selectTab = function(tab){
             views[j].style.display = "flex";
             if(views[j].id === "homeview"){
                 // Get user data from server
+                var sessionToken = localStorage.getItem("token");
                 sendGETrequest("/get-user-data-by-token/?token=" + sessionToken, function (response){
                     if(response.success){
                         currentlyVisiting = response.data.email;
@@ -195,16 +182,18 @@ selectTab = function(tab){
 };
 
 signOut = function(){
-    var params = "token="+sessionToken;
-     sendPOSTRequest("/signout", params, function (response) {
-         if (response.success) {
-             localStorage.removeItem("token");
-             sessionToken = null;
-             displayView();
-         } else {
-             //TODO: idk, sign out anyways?
-         }
-     })
+    var sessionToken = localStorage.getItem("token");
+    var params = {"token": sessionToken};
+    sendPOSTRequest("/signout", params, function (response) {
+        if (response.success) {
+            localStorage.removeItem("token");
+            displayView();
+        } else {
+            //Could happen, sign them out anyways...
+            localStorage.removeItem("token");
+            displayView();
+        }
+    })
 };
 
 changePassword = function(){
@@ -218,7 +207,11 @@ changePassword = function(){
     if(changePass === "OK"){
         var token = localStorage.getItem("token");
 
-        var params = "token="+token+"&old_password="+oldpw+"&new_password="+newpw;
+        var params = {
+            "token": token,
+            "old_password": oldpw,
+            "new_password": newpw
+        };
         sendPOSTRequest("/change-password", params, function (response) {
 
             document.getElementById("changePassError").innerText = response.message;
@@ -242,8 +235,12 @@ function writePost() {
     document.getElementById("writeMessage").value = "";
 
     if(message.length !== 0) {
-
-        var params = "message=" + message + "&token=" + sessionToken + "&email=" + currentlyVisiting;
+        var sessionToken = localStorage.getItem("token");
+        var params = {
+            "message": message,
+            "token": sessionToken,
+            "email": currentlyVisiting
+        };
         sendPOSTRequest("/post-message", params, function (response) {
             if (response.success){
                 refreshWall();
@@ -251,7 +248,6 @@ function writePost() {
         });
 
     }
-
 }
 
 function refreshWall() {
@@ -262,10 +258,10 @@ function refreshWall() {
     }
 
     // Get user data
+    var sessionToken = localStorage.getItem("token");
     sendGETrequest("/get-user-messages-by-email/?token=" + sessionToken + "&email=" + currentlyVisiting, function (response) {
         if (response.success) {
             var userdata = response.data;
-            console.log(userdata);
             // Loops through all messages in reverse order
             for(var i = userdata.content.length - 1; i >= 0; i--){
 
@@ -274,7 +270,7 @@ function refreshWall() {
                 messageDiv.className = "wallPost";
                 messageDiv.style.wordBreak = "break-all";
                 messageDiv.style.background = "rgba(173, 216, 230, 0.5)";
-                messageDiv.style.margin = "4px 25px 4px 0";
+                messageDiv.style.margin = "4px 15px 4px 0";
                 messageDiv.style.padding = "3px";
                 messageDiv.style.whiteSpace = "pre-line";
                 messageDiv.style.webkitTextFillColor = "darkcyan";
@@ -309,6 +305,7 @@ function updateUserInfo(userInfo){
 function findUser() {
     var email = document.getElementById("userToVisit").value;
 
+    var sessionToken = localStorage.getItem("token");
     sendGETrequest("/get-user-data-by-email/?token=" + sessionToken + "&email=" + email, function (response) {
         if (response.success) {
             document.getElementById("homeview").style.display = "flex";
@@ -321,19 +318,140 @@ function findUser() {
             console.log("lol no friends");
         }
     })
+}
 
+// This generates the charts
+generateCharts = function () {
+    // Random index for chart colors
+    var ri = Math.floor(Math.random() * chartColors.length);
+
+    genderChart = new Chart(document.getElementById("chart1"), {
+        type: 'pie',
+        data: {
+            labels: [],
+            datasets: [{
+                backgroundColor: [
+                    chartColors[ri],
+                    chartColors[(ri+1)%5],
+                    chartColors[(ri+2)%5]
+                ],
+                data: []
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Gender distribution'
+            },
+            legend: {
+                display: false
+            }
+        }
+    });
+
+    ri = Math.floor(Math.random() * chartColors.length);
+    usersChart = new Chart(document.getElementById("chart2"), {
+        type: 'pie',
+        data: {
+            labels: [],
+            datasets: [{
+                backgroundColor: [
+                    chartColors[ri],
+                    chartColors[(ri+1)%5]
+                ],
+                data: []
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Logged in users'
+            },
+            legend: {
+                display: false
+            }
+        }
+    });
+        messageChart = new Chart(document.getElementById("chart3"), {
+        type: 'pie',
+        data: {
+            labels: [],
+            datasets: [{
+                backgroundColor: [],
+                data: []
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Message distribution'
+            },
+            legend: {
+                display: false
+            }
+        }
+    });
+};
+
+// Updates chart data
+function updateStats(index, chart, stats){
+    switch(index){
+        // Gender data
+        case 0:
+            stats.forEach(function (entry, i) {
+                chart.data.labels[i] = entry.gender;
+                chart.data.datasets[0].data[i] = entry.count;
+            });
+            break;
+        // Logged in users data
+        case 1:
+            chart.data.labels[0] = "Logged in users";
+            chart.data.labels[1] = "Total users";
+
+            chart.data.datasets[0].data[0] = stats[0].logged_in;
+            chart.data.datasets[0].data[1] = stats[0].total;
+
+            break;
+        // Messages data
+        case 2:
+            var ri = Math.floor(Math.random() * chartColors.length);
+            stats.forEach(function (entry, i) {
+                chart.data.labels[i] = entry.from_user;
+                chart.data.datasets[0].data[i] = entry.count;
+
+                chart.data.datasets[0].backgroundColor[i] =
+                    chartColors[(ri + i)%5]
+
+                // if (i >= chart.data.datasets[0].backgroundColor.length){
+                // }
+            });
+            break;
+    }
+
+    chart.update();
+}
+
+// For getting the chart data from the server
+function requestStats(){
+    console.log("requesting stats");
+    var token = localStorage.getItem("token");
+    var data = {
+        "type": "get-stats",
+        "data": token
+    };
+    ws.send(JSON.stringify(data));
 }
 
 function sendPOSTRequest(url, params, callback){
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", url, true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.onreadystatechange = function () {
         if (xhttp.readyState === 4 && xhttp.status === 200) {
             callback(JSON.parse(xhttp.responseText));
         }
     };
-    xhttp.send(params)
+    xhttp.send(JSON.stringify(params));
 }
 
 function sendGETrequest(url, callback) {
@@ -346,4 +464,48 @@ function sendGETrequest(url, callback) {
     };
     xhttp.send(null);
 }
+
+function webSocketConnect() {
+    ws = new WebSocket('ws://localhost:5000/socket-api');
+    ws.onopen = function () {
+        console.log("Opened socket");
+
+        var sessionToken = localStorage.getItem("token");
+        if(sessionToken !== null){
+            var message = {
+                "type": "login",
+                "data": sessionToken
+            };
+            ws.send(JSON.stringify(message));
+            generateCharts();
+            requestStats();
+
+        } else {
+            console.log("Token was null");
+        }
+    };
+
+    // Listens for incoming data from server
+    ws.onmessage = function (ev) {
+        // console.log("server message: " + ev.data);
+        var response = JSON.parse(ev.data);
+        if(response.type === "signout"){
+            console.log("hey I'm signing out");
+            signOut();
+        }
+        if(response.type === "get-stats"){
+            console.log("got stats");
+            var stats = response.data;
+            updateStats(0, genderChart, stats.gender_stats);
+            updateStats(1, usersChart, stats.login_stats);
+            if(stats.message_stats !== undefined){
+                updateStats(2, messageChart, stats.message_stats);
+            }
+        }
+    };
+}
+
+
+
+
 
