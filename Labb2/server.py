@@ -188,4 +188,4 @@ def validate(password):
 
 
 if __name__ == '__main__':
-    app.run().s
+    app.run()
