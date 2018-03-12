@@ -1,0 +1,274 @@
+
+body {
+
+    font-family: "Trebuchet MS";
+    background-image: url("tree.jpg");
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+button {
+    float: right;
+}
+
+h3{
+    color: rgb(0, 73, 78);
+    margin: 5px 0 12px 0;
+}
+
+#container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 100px;
+    height: 400px;
+}
+
+#logo {
+    outline: 3px solid;
+}
+
+#accountArea {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    height: 400px;
+    width: 250px;
+}
+
+.accForm{
+    display: inline-block;
+    width: 100%;
+    line-height: 140%;
+    margin: 2px 0;
+}
+.accForm input, .accForm select{
+    width: 130px;
+    float: right;
+    height: 19px;
+}
+
+.accForm button{
+    width: 80px;
+    float: right;
+}
+
+.accForm label {
+    width: 100px;
+    float: left;
+}
+
+#signin {
+    outline: 3px solid;
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: rgba(173, 216, 230, 0.8);
+}
+
+#signup {
+    display: flex;
+    flex-direction: column;
+    outline: 3px solid;
+    padding: 5px;
+    background-color: rgba(173, 216, 230, 0.8);
+    flex-grow: 1;
+    justify-content: space-evenly;
+}
+
+#profile{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 800px;
+    background-color: rgba(173, 216, 230, 0.8);
+}
+
+#tabs{
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+}
+
+#home, #browse, #account {
+    width: 20%;
+    height: 50px;
+    margin: 5px 5px 0 5px;
+    background-color: #969c99;
+    border: 2px solid;
+    text-align: center;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+#pcontainer{
+    display: flex;
+    flex-direction: column-reverse;
+    background-color: #c7ceca;
+    margin: 0 20px 20px 20px;
+    outline: 2px solid;
+}
+
+.pcontent{
+    justify-content: center;
+    margin: 40px 30px 30px 30px;
+    flex-grow: 1;
+}
+#homeview {
+    flex-direction: column;
+}
+#homecontent{
+    display: flex;
+    justify-content: center;
+}
+
+#changePass{
+    display: block;
+    padding: 10px;
+    background: #e0e7e3;
+}
+
+#changePassForm{
+    width: 350px;
+    line-height: 140%;
+}
+
+#changePassForm label{
+    width: 170px;
+    float:left;
+    height: 20px;
+}
+
+#changePassForm input{
+    float: right;
+    width: 150px;
+    height: 20px;
+    flex-grow: 1;
+}
+
+#signOut{
+    flex-grow: 1;
+    background: #e0e7e3;
+    margin: 0 0 0 10px;
+    padding: 10px;
+}
+
+#signOutButton{
+    height: 30px;
+    width: 100px;
+    float: none;
+    background: lightblue;
+}
+
+#userDiv{
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: 250px;
+}
+
+#userInfo{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#pictureArea{
+    display: flex;
+    border: 5px solid #c7ceca;
+    width: 200px;
+    height: 200px;
+    margin: auto;
+
+}
+
+#homeWall{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 400px;
+}
+
+#writePostForm textarea{
+    width: 100%;
+    height: 56px;
+}
+
+#writePostForm button, #postWall button, #changePassForm button{
+    margin: 6px 0 0 0;
+}
+
+#postWall{
+    background: #e0e7e3;
+    padding: 10px;
+    flex-grow: 1;
+}
+
+#wall{
+    overflow: auto;
+    max-height: 253px;
+    margin: 0 -15px 0 0;
+}
+#statsContent{
+    height: auto;
+    margin: 5px 15px;
+}
+#canvasArea{
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+#mediaDiv{
+    height: auto;
+    margin: 5px 15px;
+}
+#uploadMedia{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 10px;
+}
+
+#uploadMedia form{
+    margin: auto;
+}
+
+#file-selected{
+    margin: 5px auto;
+    padding: 3px;
+    border: 2px solid #e0e7e3;
+}
+
+#uploads{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 10px;
+}
+#imgContainer{
+    margin: 5px;
+}
+
+.custom-file-upload{
+    display: inline-block;
+    padding: 0 12px;
+    cursor: pointer;
+    background: #c7ceca;
+    font-size: small;
+    margin: 5px auto;
+}
+
+.contentBox{
+    background: #e0e7e3;
+    margin: 5px;
+    padding: 10px;
+}
+.graph{
+    margin: 2px;
+}
+
+.error {
+    color: red;
+    width: 100%;
+    font-size: 14px;
+}

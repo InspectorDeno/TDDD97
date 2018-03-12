@@ -1,0 +1,187 @@
+<html>
+<head>
+
+    <meta content="text/view" charset="utf-8" http-equiv="Content-Type">
+    <link href="client.css?=118" type="text/css" rel="stylesheet">
+    <script src="client.js?=119" type="text/javascript"></script>
+    <script src="media.js?=119" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+
+    <script type="text/html" id="loginview">
+
+    <div id="container">
+        <div id="logo">
+            <img src="wimage.png"/>
+        </div>
+
+        <div id="accountArea">
+            <div id="signin">
+                <form action="javascript:login()" method ="post" class="accForm">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" required/><br>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required/><br>
+                    <button type="submit">Login</button>
+                </form>
+                <div id="signinError" class="error"></div>
+            </div>
+            <div id="signup">
+                <h3 align="center">Sign up here</h3>
+                <form action="javascript:signup()" method="post" class="accForm">
+                    <label>First Name</label>
+                    <input type="text" name="signup-firstName" id="signup-firstName" required><br>
+                    <label>Family Name</label>
+                    <input type="text" name="signup-familyName" id="signup-familyName" required><br>
+                    <label>Gender</label>
+                    <select id="signup-gender">
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                        <option value="other">Other</option>
+
+                    </select> <br>
+                    <label>City</label>
+                    <input type="text" name="signup-city" id="signup-city" required><br>
+                    <label>Country</label>
+                    <input type="text" name="signup-country" id="signup-country" required><br>
+                    <label>Email</label>
+                    <input type="email" name="signup-email" id="signup-email" required><br>
+                    <label>Password</label>
+                    <input type="password" name="signup-pw" id="signup-pw" required><br>
+                    <label>Repeat PSW</label>
+                    <input type="password" name="signup-rpw" id="signup-rpw" required><br>
+                    <button type="submit">Sign Up</button>
+                </form>
+                <div id="signupError" class="error"></div>
+            </div>
+        </div>
+    </div>
+    </script>
+
+    <script type="text/html" id="profileview">
+        <div id="profile">
+            <div id="tabs">
+                <div id="home" onclick="selectTab(this)" >
+                    <h2 style="margin: 12px">Home</h2>
+                </div>
+                <div id="browse" onclick="selectTab(this)">
+                    <h2 style="margin: 12px">Browse</h2>
+                </div>
+                <div id="account" onclick="selectTab(this)">
+                    <h2 style="margin: 12px">Account</h2>
+                </div>
+            </div>
+            <div id="pcontainer">
+                <div id="homeview" class="pcontent">
+                    <div id="homecontent">
+                        <div id="userDiv" class="contentBox">
+                            <h3 align="center">User Info</h3>
+                            <div id="userInfo">
+                                <div id="userInfoLabels">
+                                    <p style="font-style: oblique">Name: </p>
+                                    <p style="font-style: oblique">Gender: </p>
+                                    <p style="font-style: oblique">City: </p>
+                                    <p style="font-style: oblique">Country: </p>
+                                    <p style="font-style: oblique">Email: </p>
+                                </div>
+                                <div id="userInfoInput">
+                                    <p id="currentName"></p>
+                                    <p id="currentGender"></p>
+                                    <p id="currentCity"></p>
+                                    <p id="currentCountry"></p>
+                                    <p id="currentEmail"></p>
+                                </div>
+                            </div>
+                            <div id="pictureArea">
+                            </div>
+                        </div>
+                        <div id="homeWall">
+                            <div id="writePost" class="contentBox">
+                                <h3 align="center" style="color: rgb(0, 73, 78)">Write Message</h3>
+
+                                <form action ="javascript:writePost()" id="writePostForm">
+                                    <textarea id="writeMessage" style="resize:none" wrap="off"></textarea>
+                                    <button type="submit">Post</button>
+                                </form>
+                            </div>
+                            <div id="postWall" class="contentBox">
+                                <h3 align="center">Wall</h3>
+                                <div id="wall"></div>
+                                <button onclick="refreshWall()">Refresh</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="statsContent" class="contentBox">
+                        <h3 align="center">Statistics</h3>
+                        <div id="canvasArea">
+                            <div class="graph">
+                                <canvas id="chart1" width="200" height="200"></canvas>
+                            </div>
+                            <div class="graph">
+                                <canvas id="chart2" width="200" height="200"></canvas>
+                            </div>
+                            <div class="graph">
+                                <canvas id="chart3" width="200" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mediaDiv" class="contentBox">
+                        <h3 align="center">Media</h3>
+                        <div id="uploadMedia">
+                            <form name="uploadmedia" id="uploadForm" enctype="multipart/form-data" onsubmit="uploadMedia(); return false;">
+                                <label class="custom-file-upload">
+                                    <input type="file" id="browsefile" style="display: none" onchange="displayFileName(this)"/>
+                                    <p>Select file</p>
+                                </label>
+                                <label class="custom-file-upload" id="uploadFile" style="display: none">
+                                    <input type="submit" value="Upload" style="display: none"/>
+                                    <p>Upload file</p>
+                                </label>
+                            </form>
+                            <span id="file-selected" style="font: caption">No file selected</span>
+
+                        </div>
+                        <div id="uploads"></div>
+                    </div>
+                </div>
+                <div id="browseview" class="pcontent">
+                    <div id="browseArea" class="contentBox">
+                        <h3 align="center"> Find user</h3>
+
+                        <input type="email" id="userToVisit" style="width: 100%"><br>
+                        <button onclick="findUser()">Search</button>
+
+                        <div class="error" id="noUserError"></div>
+                    </div>
+
+                </div>
+                <div id="accountview" class="pcontent">
+
+                    <div id="changePass">
+                        <h3 style="text-align: center">Change Password</h3>
+                        <form action ="javascript:changePassword()" id="changePassForm">
+                            <label>Old Password</label>
+                            <input type="password" id="oldpw" required><br>
+                            <label>New Password</label>
+                            <input type="password" id="newpw" required><br>
+                            <label>Repeat new Password</label>
+                            <input type="password" id="rnewpw" required><br>
+                            <button type ="submit">Change</button><br>
+                        </form>
+                        <div id="changePassError" class="error"></div>
+                    </div>
+                    <div id="signOut" style="text-align: center">
+                        <h3>Sign Out</h3><br>
+                        <button onclick="signOut()" id="signOutButton">Sign out</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+
+</head>
+<body>
+<div id="view"></div>
+</body>
+</html>
