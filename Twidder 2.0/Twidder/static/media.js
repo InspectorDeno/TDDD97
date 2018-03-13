@@ -57,7 +57,7 @@ downloadMedia = function() {
             }
         });
     }
-}
+};
 
 /**
  * Displays downloaded audio/video or image files
@@ -72,12 +72,13 @@ displayMedia = function(media, displayOptions) {
         media.forEach(function (file) {
             if(isPhoto(file[1])){
                 document.getElementById("uploads").innerHTML +=
-                    "<div name='imgContainer' style='max-width: 100%; margin: 15px auto; display: flex; flex-direction: column; justify-content: center'>" +
-                    '<img id='+file[2]+' src=\"data:image/' + file[1] + ';base64,' + file[0] + "\" onclick='displayOptions(this)' style= 'width: 100%'/>";
+                    "<div class='imgContainer'>" +
+                    '<img id='+file[2]+' src=\"data:image/' + file[1] + ';base64,' + file[0] + "\" onclick='displayOptions(this)' " +
+                    "style= 'width: auto; height: 100%; max-width:100%; object-fit: scale-down; box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3)'/>";
             } else {
                 document.getElementById("uploads").innerHTML +=
                     "<video controls><source src=\"data:audio/" + file[1] + ";base64," + file[0] + "\" " +
-                    "style='max-width: 100%; height: 100%; margin: 15px;'/>";
+                    "style=' height: 100%; margin: 15px; box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3)'/>";
             }
         });
     } else {
@@ -86,7 +87,7 @@ displayMedia = function(media, displayOptions) {
         media.forEach(function (file) {
             if(isPhoto(file[1])){
                 document.getElementById("uploads").innerHTML +=
-                    "<div name='imgContainer' style='max-width: 100%; margin: 15px auto; display: flex; flex-direction: column; justify-content: center'>" +
+                    "<div class='imgContainer' style='max-width: 100%; margin: 15px auto; display: flex; flex-direction: column; justify-content: center'>" +
                     '<img id='+file[2]+' src=\"data:image/' + file[1] + ';base64,' + file[0] + "\"' style= 'width: 100%'/>";
             } else {
                 document.getElementById("uploads").innerHTML +=
@@ -140,6 +141,7 @@ displayMessage = function (message, success) {
         document.getElementById('file-selected').style.borderBottomColor = 'lime';
     } else {
         document.getElementById('file-selected').style.borderBottomColor = 'red';
+        document.getElementById('uploadFile').style.display = 'none';
     }
 };
 
@@ -150,7 +152,7 @@ displayMessage = function (message, success) {
 displayOptions = function (image) {
     // Clear options
     resetPhotoWall();
-    image.style.border = '5px solid gold';
+    // image.style.border = '5px solid gold';
 
     var optionsDiv = document.createElement("div");
     optionsDiv.style.display = "flex";
@@ -192,19 +194,19 @@ displayOptions = function (image) {
  * Clears photo wall of option elements and other elements
  */
 resetPhotoWall = function () {
-    var allDivs = document.getElementsByName("imgContainer");
-    allDivs.forEach(function (div) {
-        while(div.childElementCount > 1){
-            div.removeChild(div.lastChild);
+    var allDivs = document.getElementsByClassName("imgContainer");
+    for(var i = 0; i < allDivs.length; i++){
+        while(allDivs[i].childElementCount > 1){
+            allDivs[i].removeChild(allDivs[i].lastChild);
         }
-        div.childNodes[0].style.border = '';
-    });
+        allDivs[i].childNodes[0].style.border = '';
+    }
     // Reset upload form
     document.getElementById("uploadForm").reset();
     document.getElementById('uploadFile').style.display = 'none';
     // Clear message text
     document.getElementById('file-selected').style.borderBottomColor = '#e0e7e3';
-    document.getElementById('file-selected').innerText = 'No file selected';
+    document.getElementById('file-selected').innerText = '';
 };
 
 /**
@@ -228,6 +230,7 @@ changeProfPic = function (file) {
                     console.log(response.message);
                 }
             });
+            displayMessage(response.message, true)
         } else {
             displayMessage(response.message, false);
         }

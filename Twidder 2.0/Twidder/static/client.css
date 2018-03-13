@@ -2,11 +2,11 @@
 body {
 
     font-family: "Trebuchet MS";
-    background-image: url("tree.jpg");
-    background-position: bottom;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-image: url("repeat-bg.png");
+    background-repeat: repeat;
+    background-size: contain;
     min-height: 100vh;
+    min-width: 100vh;
 }
 
 button {
@@ -82,24 +82,31 @@ h3{
     flex-direction: column;
     margin: 0 auto;
     width: 800px;
-    background-color: rgba(173, 216, 230, 0.8);
+    /*background-color: rgba(173, 216, 230, 0.8);*/
 }
 
 #tabs{
     display: flex;
     justify-content: center;
-    z-index: 1;
 }
 
-#home, #browse, #account {
-    width: 20%;
+.tab{
+    width: 23%;
     height: 50px;
-    margin: 5px 5px 0 5px;
-    background-color: #969c99;
-    border: 2px solid;
+    margin-top: 15px;
+    margin-right: -10px;
+    background-color: #b2b8b5;
+    /*border: 2px solid;*/
     text-align: center;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+    box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
+    transition: all .2s;
+}
+.tab:hover {
+    height: 60px;
+    margin-top: 5px;
+    transition-duration: .2s;
 }
 
 #pcontainer{
@@ -107,7 +114,10 @@ h3{
     flex-direction: column-reverse;
     background-color: #c7ceca;
     margin: 0 20px 20px 20px;
-    outline: 2px solid;
+    /*outline: 2px solid;*/
+    z-index: 4;
+    box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
+
 }
 
 .pcontent{
@@ -123,11 +133,17 @@ h3{
     justify-content: center;
 }
 
-#changePass{
-    display: block;
-    padding: 10px;
-    background: #e0e7e3;
+#browseArea{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
+
+#browseArea form{
+    display: inline-block;
+    margin: auto;
+}
+
 
 #changePassForm{
     width: 350px;
@@ -147,13 +163,6 @@ h3{
     flex-grow: 1;
 }
 
-#signOut{
-    flex-grow: 1;
-    background: #e0e7e3;
-    margin: 0 0 0 10px;
-    padding: 10px;
-}
-
 #signOutButton{
     height: 30px;
     width: 100px;
@@ -164,8 +173,9 @@ h3{
 #userDiv{
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     height: auto;
-    width: 250px;
+    max-width: 270px;
 }
 
 #userInfo{
@@ -174,24 +184,23 @@ h3{
 }
 
 #pictureArea{
-    display: flex;
-    border: 5px solid #c7ceca;
-    width: 200px;
-    height: 200px;
+    display: block;
     margin: auto;
-
+    border: 5px solid #c7ceca;
+    max-width: 190px;
+    max-height: 190px;
 }
 
 #homeWall{
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex-grow: 2;
     max-width: 400px;
 }
 
 #writePostForm textarea{
     width: 100%;
-    height: 56px;
+    height: 58px;
 }
 
 #writePostForm button, #postWall button, #changePassForm button{
@@ -207,21 +216,16 @@ h3{
 #wall{
     overflow: auto;
     max-height: 253px;
-    margin: 0 -15px 0 0;
+    padding: 5px;
+    background: #f3faf6;
 }
-#statsContent{
-    height: auto;
-    margin: 5px 15px;
-}
+
 #canvasArea{
     display: flex;
     justify-content: center;
     padding: 10px;
 }
-#mediaDiv{
-    height: auto;
-    margin: 5px 15px;
-}
+
 #uploadMedia{
     display: flex;
     flex-direction: column;
@@ -242,11 +246,24 @@ h3{
 #uploads{
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
-    padding: 10px;
+    justify-content: center;
+    padding: 20px;
+    background: #F9F8F9;
+    box-shadow: 6px 6px 11px rgba(0, 0, 0, 0.6);
+    margin: 0 -30px 30px -30px;
+    max-height: 700px;
+    overflow: auto;
 }
-#imgContainer{
-    margin: 5px;
+.imgContainer{
+    display: flex;
+    flex-direction: column;
+    margin: 15px auto;
+    max-height: 400px;
+}
+
+.imgContainer:hover{
+    outline: 5px solid gold;
+    transition-duration: .1s;
 }
 
 .custom-file-upload{
@@ -262,6 +279,7 @@ h3{
     background: #e0e7e3;
     margin: 5px;
     padding: 10px;
+    box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
 }
 .graph{
     margin: 2px;

@@ -308,7 +308,6 @@ def upload_media():
 
 @app.route('/download-media/token', methods=['POST'])
 def download_media_token():
-    print("Downloading media from token")
     req = request.get_json(force=True)
     token = req['token']
     email = database_helper.get_email(token)
@@ -377,7 +376,7 @@ def change_profile_pic():
     if not database_helper.change_profile_pic(pic_id, email):
         return jsonify(success=False, message='Failed to change picture')
 
-    return jsonify(success=True, message='Successfully changed profile picture')
+    return jsonify(success=True, message='Profile picture changed!')
 
 
 def create_media(media_data):

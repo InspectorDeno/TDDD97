@@ -1,6 +1,6 @@
 var passwordLength = 5;
 var currentlyVisiting;
-var chartColors = [
+var colors = [
     '#d594d4',
     '#9492d5',
     '#a0d5d5',
@@ -148,11 +148,20 @@ selectTab = function(tab){
 
     var tabs = document.getElementById("tabs").getElementsByTagName("div");
     // loop through all tabs
+
     for(var i=0; i < tabs.length; i++){
-        tabs[i].style.borderBottomColor = "black";
-        tabs[i].style.backgroundColor = "#969c99";
+        tabs[i].style.backgroundColor = "#b2b8b5";
+        if(tabs[i].id === 'home'){
+            tabs[i].style.zIndex = '2';
+        } else if (tabs[i].id === 'browse'){
+            tabs[i].style.zIndex = '1';
+        } else {
+            tabs[i].style.zIndex = '0';
+        }
+        console.log(tabs[i].id);
     }
     // specify appearance of specific tab
+    tab.style.zIndex = '3';
     tab.style.borderBottomColor = "#c7ceca";
     tab.style.backgroundColor = "#c7ceca";
 
@@ -269,22 +278,26 @@ refreshWall = function() {
             var userData = response.data;
             // Loops through all messages in reverse order
             userData.reverse();
-            userData.forEach(function (message) {
+            userData.forEach(function (message, i) {
 
                 // Create a messageDiv to append
+                var color = colors[i%5];
                 var messageDiv = document.createElement("div");
+                messageDiv.id = message.from_user+i;
                 messageDiv.className = "wallPost";
                 messageDiv.style.wordBreak = "break-all";
-                messageDiv.style.background = "rgba(173, 216, 230, 0.5)";
-                messageDiv.style.margin = "4px 15px 4px 0";
+                messageDiv.style.background = color+"22";
+                messageDiv.style.margin = "4px";
                 messageDiv.style.padding = "3px";
                 messageDiv.style.whiteSpace = "pre-line";
-                messageDiv.style.webkitTextFillColor = "darkcyan";
+                messageDiv.style.webkitTextFillColor = "darkslategrey";
+                messageDiv.style.fontSize = "small";
+                messageDiv.draggable = true;
 
                 // Pimp name of writer
                 var writer = document.createTextNode(message.from_user + ": \n");
                 var writerStyle = document.createElement("span");
-                writerStyle.style.webkitTextFillColor = "#00494e";
+                writerStyle.style.webkitTextFillColor = colors[i%5];
                 writerStyle.style.fontWeight = "bold";
                 writerStyle.appendChild(writer);
 
@@ -297,7 +310,7 @@ refreshWall = function() {
             });
         }
     })
-}
+};
 
 updateUserInfo = function(userInfo){
     document.getElementById("currentName").innerText = userInfo.firstname + " " + userInfo.familyname;
@@ -307,8 +320,9 @@ updateUserInfo = function(userInfo){
     document.getElementById("currentEmail").innerText = userInfo.email;
     // Profile picture
     document.getElementById("pictureArea").innerHTML =
-        "<img src=\"data:image/" + userInfo.profile_pic[0][1] + ';base64,' + userInfo.profile_pic[0][0] + "\" style='height: 100%; width: 100%'/>";
-}
+        "<img id='profilePic' src=\"data:image/" + userInfo.profile_pic[0][1] + ';base64,' + userInfo.profile_pic[0][0] + "\" " +
+        "style='width: 100%;height: 100%;object-fit: cover'/>";
+};
 
 findUser = function() {
     var email = document.getElementById("userToVisit").value;
@@ -333,7 +347,7 @@ findUser = function() {
 // This generates the charts
 generateCharts = function () {
     // Random index for chart colors
-    var ri = Math.floor(Math.random() * chartColors.length);
+    var ri = Math.floor(Math.random() * colors.length);
 
     genderChart = new Chart(document.getElementById("chart1"), {
         type: 'pie',
@@ -341,9 +355,9 @@ generateCharts = function () {
             labels: [],
             datasets: [{
                 backgroundColor: [
-                    chartColors[ri],
-                    chartColors[(ri+1)%5],
-                    chartColors[(ri+2)%5]
+                    colors[ri],
+                    colors[(ri+1)%5],
+                    colors[(ri+2)%5]
                 ],
                 data: []
             }]
@@ -359,15 +373,15 @@ generateCharts = function () {
         }
     });
 
-    ri = Math.floor(Math.random() * chartColors.length);
+    ri = Math.floor(Math.random() * colors.length);
     usersChart = new Chart(document.getElementById("chart2"), {
         type: 'pie',
         data: {
             labels: [],
             datasets: [{
                 backgroundColor: [
-                    chartColors[ri],
-                    chartColors[(ri+1)%5]
+                    colors[ri],
+                    colors[(ri+1)%5]
                 ],
                 data: []
             }]
@@ -426,13 +440,13 @@ updateCharts = function(index, chart, stats){
             break;
         // Messages data
         case 2:
-            var ri = Math.floor(Math.random() * chartColors.length);
+            var ri = Math.floor(Math.random() * colors.length);
             stats.forEach(function (entry, i) {
                 chart.data.labels[i] = entry.from_user;
                 chart.data.datasets[0].data[i] = entry.count;
 
                 chart.data.datasets[0].backgroundColor[i] =
-                    chartColors[(ri + i)%5]
+                    colors[(ri + i)%5]
             });
             break;
     }
@@ -501,7 +515,7 @@ sendFileRequest = function(url, formData, callback){
         }
     };
     xhttp.send(formData);
-}
+};
 
 webSocketConnect = function() {
     ws = new WebSocket('ws://localhost:5000/socket-api');
@@ -542,7 +556,7 @@ webSocketConnect = function() {
             }
         }
     };
-}
+};
 
 
 

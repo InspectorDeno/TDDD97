@@ -2,9 +2,10 @@
 <head>
 
     <meta content="text/view" charset="utf-8" http-equiv="Content-Type">
-    <link href="client.css?=118" type="text/css" rel="stylesheet">
-    <script src="client.js?=119" type="text/javascript"></script>
-    <script src="media.js?=119" type="text/javascript"></script>
+    <link href="client.css?=121" type="text/css" rel="stylesheet">
+    <script src="client.js?=121" type="text/javascript"></script>
+    <script src="media.js?=121" type="text/javascript"></script>
+    <script src="dragdrop.js?=121" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
 
     <script type="text/html" id="loginview">
@@ -60,13 +61,13 @@
     <script type="text/html" id="profileview">
         <div id="profile">
             <div id="tabs">
-                <div id="home" onclick="selectTab(this)" >
+                <div id="home" class="tab" onclick="selectTab(this)" style="z-index: 2" >
                     <h2 style="margin: 12px">Home</h2>
                 </div>
-                <div id="browse" onclick="selectTab(this)">
+                <div id="browse" class="tab" onclick="selectTab(this)" style="z-index: 1">
                     <h2 style="margin: 12px">Browse</h2>
                 </div>
-                <div id="account" onclick="selectTab(this)">
+                <div id="account" class="tab" onclick="selectTab(this)" style="z-index: 0">
                     <h2 style="margin: 12px">Account</h2>
                 </div>
             </div>
@@ -99,7 +100,7 @@
                                 <h3 align="center" style="color: rgb(0, 73, 78)">Write Message</h3>
 
                                 <form action ="javascript:writePost()" id="writePostForm">
-                                    <textarea id="writeMessage" style="resize:none" wrap="off"></textarea>
+                                    <textarea id="writeMessage" style="resize:none" wrap="off" on></textarea>
                                     <button type="submit">Post</button>
                                 </form>
                             </div>
@@ -131,14 +132,14 @@
                             <form name="uploadmedia" id="uploadForm" enctype="multipart/form-data" onsubmit="uploadMedia(); return false;">
                                 <label class="custom-file-upload">
                                     <input type="file" id="browsefile" style="display: none" onchange="displayFileName(this)"/>
-                                    <p>Select file</p>
+                                    <p>Select file to upload</p>
                                 </label>
                                 <label class="custom-file-upload" id="uploadFile" style="display: none">
                                     <input type="submit" value="Upload" style="display: none"/>
                                     <p>Upload file</p>
                                 </label>
                             </form>
-                            <span id="file-selected" style="font: caption">No file selected</span>
+                            <span id="file-selected" style="font: caption"></span>
 
                         </div>
                         <div id="uploads"></div>
@@ -148,16 +149,18 @@
                     <div id="browseArea" class="contentBox">
                         <h3 align="center"> Find user</h3>
 
-                        <input type="email" id="userToVisit" style="width: 100%"><br>
-                        <button onclick="findUser()">Search</button>
-
-                        <div class="error" id="noUserError"></div>
+                        <form action="javascript:findUser()">
+                            <input type="email" id="userToVisit"><br>
+                            <button type="submit">Search</button>
+                            <br>
+                            <div class="error" id="noUserError" style="text-align: center"></div>
+                        </form>
                     </div>
 
                 </div>
                 <div id="accountview" class="pcontent">
 
-                    <div id="changePass">
+                    <div id="changePass" class ="contentBox">
                         <h3 style="text-align: center">Change Password</h3>
                         <form action ="javascript:changePassword()" id="changePassForm">
                             <label>Old Password</label>
@@ -170,7 +173,7 @@
                         </form>
                         <div id="changePassError" class="error"></div>
                     </div>
-                    <div id="signOut" style="text-align: center">
+                    <div id="signOut" style="text-align: center; flex-grow: 1" class="contentBox">
                         <h3>Sign Out</h3><br>
                         <button onclick="signOut()" id="signOutButton">Sign out</button>
                     </div>
@@ -178,7 +181,6 @@
             </div>
         </div>
     </script>
-
 
 </head>
 <body>
