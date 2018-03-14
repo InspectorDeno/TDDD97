@@ -4,7 +4,7 @@ ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif','mp4', 'ogg'];
  * Uploads media to the server
  */
 uploadMedia = function() {
-    var file = document.getElementById("browsefile").files[0];
+    var file = document.getElementById(prefix+"browsefile").files[0];
     if (file === undefined) {
         // displayMessage('File type is undefined');
     } else {
@@ -30,6 +30,8 @@ uploadMedia = function() {
  */
 downloadMedia = function() {
     console.log("Fetching media files...");
+    console.log("prefix is " + prefix);
+
     var token = localStorage.getItem("token");
     var params;
     // Downloading other users media (their email as argument)
@@ -52,8 +54,8 @@ downloadMedia = function() {
             if(response.success){
                 displayMedia(response.data, true);
                 // Reset upload form
-                document.getElementById("uploadForm").reset();
-                document.getElementById('uploadFile').style.display = 'none';
+                document.getElementById(prefix+"uploadForm").reset();
+                document.getElementById(prefix+'uploadFile').style.display = 'none';
             }
         });
     }
@@ -65,37 +67,24 @@ downloadMedia = function() {
  * @param displayOptions True if we want to show media options onclick, false if not
  */
 displayMedia = function(media, displayOptions) {
-    document.getElementById("uploads").innerHTML = "";
+    document.getElementById(prefix+"uploads").innerHTML = "";
     if(displayOptions){
         // Show upload elements
-        document.getElementById("uploadMedia").style.display = 'flex';
-        media.forEach(function (file) {
-            if(isPhoto(file[1])){
-                document.getElementById("uploads").innerHTML +=
-                    "<div class='imgContainer'>" +
-                    '<img id='+file[2]+' src=\"data:image/' + file[1] + ';base64,' + file[0] + "\" onclick='displayOptions(this)' " +
-                    "style= 'width: auto; height: 100%; max-width:100%; object-fit: scale-down; box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3)'/>";
-            } else {
-                document.getElementById("uploads").innerHTML +=
-                    "<video controls><source src=\"data:audio/" + file[1] + ";base64," + file[0] + "\" " +
-                    "style=' height: 100%; margin: 15px; box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3)'/>";
-            }
-        });
+        document.getElementById(prefix+"uploadMedia").style.display = 'flex';
     } else {
-        // Hide upload elements
-        document.getElementById("uploadMedia").style.display = 'none';
-        media.forEach(function (file) {
-            if(isPhoto(file[1])){
-                document.getElementById("uploads").innerHTML +=
-                    "<div class='imgContainer' style='max-width: 100%; margin: 15px auto; display: flex; flex-direction: column; justify-content: center'>" +
-                    '<img id='+file[2]+' src=\"data:image/' + file[1] + ';base64,' + file[0] + "\"' style= 'width: 100%'/>";
-            } else {
-                document.getElementById("uploads").innerHTML +=
-                    "<video controls><source src=\"data:audio/" + file[1] + ";base64," + file[0] + "\" " +
-                    "style='max-width: 100%; height: 100%; margin: 15px;'/>";
-            }
-        });
+        document.getElementById(prefix+"uploadMedia").style.display = 'none';
     }
+    media.forEach(function (file) {
+        if(isPhoto(file[1])){
+            document.getElementById(prefix+"uploads").innerHTML +=
+                "<div class='gridItem'>" +
+                '<img id='+file[2]+' src=\"data:image/' + file[1] + ';base64,' + file[0] + "\" onclick='displayOptions(this)'/></div>";
+        } else {
+            document.getElementById(prefix+"uploads").innerHTML +=
+                "<div class='gridItem gridVideo'>" +
+                "<video controls><source src=\"data:audio/" + file[1] + ";base64," + file[0] + "\"/></video></div>";
+        }
+    });
 };
 
 /**
@@ -105,7 +94,7 @@ displayMedia = function(media, displayOptions) {
 displayFileName = function (element) {
     var file = element.files[0].name;
     if (allowedExtensions(file)) {
-        document.getElementById('uploadFile').style.display = 'inline-block';
+        document.getElementById(prefix+'uploadFile').style.display = 'inline-block';
         displayMessage(file, true);
     } else {
         displayMessage('Unsupported file format', false);
@@ -136,12 +125,12 @@ isPhoto = function (ext) {
  * @param success displays green border if true, red if false
  */
 displayMessage = function (message, success) {
-    document.getElementById('file-selected').innerText = message;
+    document.getElementById(prefix+'file-selected').innerText = message;
     if (success){
-        document.getElementById('file-selected').style.borderBottomColor = 'lime';
+        document.getElementById(prefix+'file-selected').style.borderBottomColor = 'lime';
     } else {
-        document.getElementById('file-selected').style.borderBottomColor = 'red';
-        document.getElementById('uploadFile').style.display = 'none';
+        document.getElementById(prefix+'file-selected').style.borderBottomColor = 'red';
+        document.getElementById(prefix+'uploadFile').style.display = 'none';
     }
 };
 
@@ -155,14 +144,13 @@ displayOptions = function (image) {
     // image.style.border = '5px solid gold';
 
     var optionsDiv = document.createElement("div");
-    optionsDiv.style.display = "flex";
-    optionsDiv.style.justifyContent = "center";
+    optionsDiv.style.display = "block";
+    optionsDiv.style.textAlign = "center";
+    optionsDiv.style.margin = "-50px 0 23px 0";
 
     // Create option element 1
     var setAsPicDiv = document.createElement("div");
-    setAsPicDiv.className = "custom-file-upload";
-    setAsPicDiv.style.padding = "3px";
-    setAsPicDiv.style.margin = "0 3px";
+    setAsPicDiv.className = "optionElement";
     setAsPicDiv.innerText = "Set profile picture";
     // Onclick listener for setting profile picture
     setAsPicDiv.addEventListener('click', function () {
@@ -173,9 +161,7 @@ displayOptions = function (image) {
 
     // Create option element 2
     var deletePicDiv = document.createElement("div");
-    deletePicDiv.className = "custom-file-upload";
-    deletePicDiv.style.padding = "3px";
-    deletePicDiv.style.margin = "0 3px";
+    deletePicDiv.className = "optionElement";
     deletePicDiv.innerText = "Delete";
     deletePicDiv.addEventListener('click', function () {
         console.log("Deleting this one!");
@@ -194,7 +180,7 @@ displayOptions = function (image) {
  * Clears photo wall of option elements and other elements
  */
 resetPhotoWall = function () {
-    var allDivs = document.getElementsByClassName("imgContainer");
+    var allDivs = document.getElementsByClassName("gridItem");
     for(var i = 0; i < allDivs.length; i++){
         while(allDivs[i].childElementCount > 1){
             allDivs[i].removeChild(allDivs[i].lastChild);
@@ -202,11 +188,11 @@ resetPhotoWall = function () {
         allDivs[i].childNodes[0].style.border = '';
     }
     // Reset upload form
-    document.getElementById("uploadForm").reset();
-    document.getElementById('uploadFile').style.display = 'none';
+    document.getElementById(prefix+"uploadForm").reset();
+    document.getElementById(prefix+'uploadFile').style.display = 'none';
     // Clear message text
-    document.getElementById('file-selected').style.borderBottomColor = '#e0e7e3';
-    document.getElementById('file-selected').innerText = '';
+    document.getElementById(prefix+'file-selected').style.borderBottomColor = '#e0e7e3';
+    document.getElementById(prefix+'file-selected').innerText = '';
 };
 
 /**
@@ -225,7 +211,7 @@ changeProfPic = function (file) {
             // Update picture by fetching user data
             sendGETrequest("/get-user-data-by-token/?token=" + token, function (response){
                 if(response.success){
-                    updateUserInfo(response.data);
+                    updateUserInfo(response.data, false);
                 } else {
                     console.log(response.message);
                 }

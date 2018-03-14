@@ -2,65 +2,65 @@
 <head>
 
     <meta content="text/view" charset="utf-8" http-equiv="Content-Type">
-    <link href="client.css?=121" type="text/css" rel="stylesheet">
-    <script src="client.js?=121" type="text/javascript"></script>
-    <script src="media.js?=121" type="text/javascript"></script>
-    <script src="dragdrop.js?=121" type="text/javascript"></script>
+    <link href="client.css?1" type="text/css" rel="stylesheet">
+    <script src="client.js?15" type="text/javascript"></script>
+    <script src="dragdrop.js?15" type="text/javascript"></script>
+    <script src="media.js?15" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
 
     <script type="text/html" id="loginview">
 
-    <div id="container">
-        <div id="logo">
-            <img src="wimage.png"/>
-        </div>
-
-        <div id="accountArea">
-            <div id="signin">
-                <form action="javascript:login()" method ="post" class="accForm">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" required/><br>
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password" required/><br>
-                    <button type="submit">Login</button>
-                </form>
-                <div id="signinError" class="error"></div>
+        <div id="loginContainer" class="rowCenter">
+            <div id="logo">
+                <img src="twidlogo.png" style="border: 5px solid #e0e7e3"/>
             </div>
-            <div id="signup">
-                <h3 align="center">Sign up here</h3>
-                <form action="javascript:signup()" method="post" class="accForm">
-                    <label>First Name</label>
-                    <input type="text" name="signup-firstName" id="signup-firstName" required><br>
-                    <label>Family Name</label>
-                    <input type="text" name="signup-familyName" id="signup-familyName" required><br>
-                    <label>Gender</label>
-                    <select id="signup-gender">
-                        <option value="female">Female</option>
-                        <option value="male">Male</option>
-                        <option value="other">Other</option>
 
-                    </select> <br>
-                    <label>City</label>
-                    <input type="text" name="signup-city" id="signup-city" required><br>
-                    <label>Country</label>
-                    <input type="text" name="signup-country" id="signup-country" required><br>
-                    <label>Email</label>
-                    <input type="email" name="signup-email" id="signup-email" required><br>
-                    <label>Password</label>
-                    <input type="password" name="signup-pw" id="signup-pw" required><br>
-                    <label>Repeat PSW</label>
-                    <input type="password" name="signup-rpw" id="signup-rpw" required><br>
-                    <button type="submit">Sign Up</button>
-                </form>
-                <div id="signupError" class="error"></div>
+            <div class="flexCol">
+                <div id="signin" class="contentBox flexCol">
+                    <form action="javascript:login()" method ="post" class="myForm">
+                        <label for="signin-email">Email</label>
+                        <input type="email" name="email" id="signin-email" required/><br>
+                        <label for="signin-password">Password</label>
+                        <input type="password" name="password" id="signin-password" required/><br>
+                        <button type="submit">Login</button>
+                    </form>
+                    <div id="signinError" class="error"></div>
+                </div>
+                <div id="signup" class="contentBox flexCol">
+                    <h3 align="center">Sign up</h3>
+                    <form action="javascript:signup()" method="post" class="myForm">
+                        <label>First Name</label>
+                        <input type="text" name="signup-firstName" id="signup-firstName" required><br>
+                        <label>Family Name</label>
+                        <input type="text" name="signup-familyName" id="signup-familyName" required><br>
+                        <label>Gender</label>
+                        <select id="signup-gender">
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                            <option value="other">Other</option>
+
+                        </select> <br>
+                        <label>City</label>
+                        <input type="text" name="signup-city" id="signup-city" required><br>
+                        <label>Country</label>
+                        <input type="text" name="signup-country" id="signup-country" required><br>
+                        <label>Email</label>
+                        <input type="email" name="signup-email" id="signup-email" required><br>
+                        <label>Password</label>
+                        <input type="password" name="signup-pw" id="signup-pw" required><br>
+                        <label>Repeat pw</label>
+                        <input type="password" name="signup-rpw" id="signup-rpw" required><br>
+                        <button type="submit">Sign Up</button>
+                    </form>
+                    <div id="signupError" class="error"></div>
+                </div>
             </div>
         </div>
-    </div>
     </script>
 
     <script type="text/html" id="profileview">
-        <div id="profile">
-            <div id="tabs">
+        <div id="main" class="flexCol">
+            <div id="tabs" class="rowCenter">
                 <div id="home" class="tab" onclick="selectTab(this)" style="z-index: 2" >
                     <h2 style="margin: 12px">Home</h2>
                 </div>
@@ -71,50 +71,50 @@
                     <h2 style="margin: 12px">Account</h2>
                 </div>
             </div>
-            <div id="pcontainer">
-                <div id="homeview" class="pcontent">
-                    <div id="homecontent">
-                        <div id="userDiv" class="contentBox">
+            <div id="pcontainer" class="flexCol">
+                <div id="homeview" class="pcontent rowCenter flexCol">
+                    <div id="topContent" class="rowCenter">
+                        <div id="userDiv" class="contentBox flexCol">
                             <h3 align="center">User Info</h3>
-                            <div id="userInfo">
-                                <div id="userInfoLabels">
+                            <div class="userInfo">
+                                <div>
                                     <p style="font-style: oblique">Name: </p>
                                     <p style="font-style: oblique">Gender: </p>
                                     <p style="font-style: oblique">City: </p>
                                     <p style="font-style: oblique">Country: </p>
                                     <p style="font-style: oblique">Email: </p>
                                 </div>
-                                <div id="userInfoInput">
-                                    <p id="currentName"></p>
-                                    <p id="currentGender"></p>
-                                    <p id="currentCity"></p>
-                                    <p id="currentCountry"></p>
-                                    <p id="currentEmail"></p>
+                                <div>
+                                    <p id="name"></p>
+                                    <p id="gender"></p>
+                                    <p id="city"></p>
+                                    <p id="country"></p>
+                                    <p id="email"></p>
                                 </div>
                             </div>
                             <div id="pictureArea">
                             </div>
                         </div>
-                        <div id="homeWall">
-                            <div id="writePost" class="contentBox">
+                        <div class="homeWall flexCol">
+                            <div class="contentBox">
                                 <h3 align="center" style="color: rgb(0, 73, 78)">Write Message</h3>
-
-                                <form action ="javascript:writePost()" id="writePostForm">
-                                    <textarea id="writeMessage" style="resize:none" wrap="off" on></textarea>
+                                <form class="writePostForm" name="writePostForm" action="javascript:writePost(writePostForm)">
+                                    <textarea id="writeMessage" style="resize:none" wrap="off"></textarea>
                                     <button type="submit">Post</button>
                                 </form>
                             </div>
-                            <div id="postWall" class="contentBox">
+                            <div class="contentBox postWall flexCol">
                                 <h3 align="center">Wall</h3>
                                 <div id="wall"></div>
-                                <button onclick="refreshWall()">Refresh</button>
-
+                                <div>
+                                    <button onclick="refreshWall()">Refresh</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div id="statsContent" class="contentBox">
+                    <div class="contentBox">
                         <h3 align="center">Statistics</h3>
-                        <div id="canvasArea">
+                        <div class="rowCenter" style="padding: 10px;">
                             <div class="graph">
                                 <canvas id="chart1" width="200" height="200"></canvas>
                             </div>
@@ -126,54 +126,136 @@
                             </div>
                         </div>
                     </div>
-                    <div id="mediaDiv" class="contentBox">
+                    <div class="contentBox rowCenter flexCol">
                         <h3 align="center">Media</h3>
-                        <div id="uploadMedia">
-                            <form name="uploadmedia" id="uploadForm" enctype="multipart/form-data" onsubmit="uploadMedia(); return false;">
-                                <label class="custom-file-upload">
-                                    <input type="file" id="browsefile" style="display: none" onchange="displayFileName(this)"/>
-                                    <p>Select file to upload</p>
-                                </label>
-                                <label class="custom-file-upload" id="uploadFile" style="display: none">
-                                    <input type="submit" value="Upload" style="display: none"/>
-                                    <p>Upload file</p>
-                                </label>
-                            </form>
-                            <span id="file-selected" style="font: caption"></span>
+                        <div id="uploadMedia" class="rowCenter">
+                            <div class="flexCol" style="margin: 0 0 10px 0">
+                                <form name="uploadmedia" id="uploadForm" enctype="multipart/form-data" onsubmit="uploadMedia(); return false;">
+                                    <label class="custom-file-upload">
+                                        <input type="file" id="browsefile" style="display: none" onchange="displayFileName(this)"/>
+                                        <p>Select file to upload</p>
+                                    </label>
+                                    <label class="custom-file-upload" id="uploadFile" style="display: none">
+                                        <input type="submit" value="Upload" style="display: none"/>
+                                        <p>Upload file</p>
+                                    </label>
+
+                                </form>
+                                <span id="file-selected" style="font: caption"></span>
+                            </div>
 
                         </div>
-                        <div id="uploads"></div>
+                        <div class="uploadsContainer">
+                            <div id="uploads" class="grid"></div>
+                        </div>
                     </div>
                 </div>
-                <div id="browseview" class="pcontent">
-                    <div id="browseArea" class="contentBox">
-                        <h3 align="center"> Find user</h3>
+                <div id="browseview" class="pcontent rowCenter">
+                    <div style="width: 100%">
+                        <div class="contentBox">
+                            <h3 align="center"> Find user</h3>
+                            <div class="rowCenter">
+                                <form action="javascript:findUser()">
+                                    <input type="email" id="userToVisit"><br>
+                                    <button type="submit">Search</button>
+                                </form>
+                                    <div class="error" id="noUserError" style="text-align: center"></div>
+                            </div>
+                        </div>
+                        <div id="browseContainer" class="flexCol">
+                            <div id="v-topContent" class="rowCenter">
+                                <div id="v-userDiv" class="contentBox flexCol">
+                                    <h3 align="center">User Info</h3>
+                                    <div class="userInfo">
+                                        <div>
+                                            <p style="font-style: oblique">Name: </p>
+                                            <p style="font-style: oblique">Gender: </p>
+                                            <p style="font-style: oblique">City: </p>
+                                            <p style="font-style: oblique">Country: </p>
+                                            <p style="font-style: oblique">Email: </p>
+                                        </div>
+                                        <div>
+                                            <p id="v-name"></p>
+                                            <p id="v-gender"></p>
+                                            <p id="v-city"></p>
+                                            <p id="v-country"></p>
+                                            <p id="v-email"></p>
+                                        </div>
+                                    </div>
+                                    <div id="v-pictureArea">
+                                    </div>
+                                </div>
+                                <div class="homeWall flexCol">
+                                    <div class="contentBox">
+                                        <h3 align="center" style="color: rgb(0, 73, 78)">Write Message</h3>
 
-                        <form action="javascript:findUser()">
-                            <input type="email" id="userToVisit"><br>
-                            <button type="submit">Search</button>
-                            <br>
-                            <div class="error" id="noUserError" style="text-align: center"></div>
-                        </form>
+                                        <form class ="writePostForm" name ="vwritePostForm" action ="javascript:writePost(vwritePostForm)">
+                                            <textarea id="v-writeMessage" style="resize:none" wrap="off" on></textarea>
+                                            <button type="submit">Post</button>
+                                        </form>
+                                    </div>
+                                    <div class="contentBox postWall">
+                                        <h3 align="center">Wall</h3>
+                                        <div id="v-wall"></div>
+                                        <button onclick="refreshWall()">Refresh</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="contentBox">
+                                <h3 align="center">Statistics</h3>
+                                <div class="rowCenter" style="padding: 10px">
+                                    <div class="graph">
+                                        <canvas id="v-chart1" width="200" height="200"></canvas>
+                                    </div>
+                                    <div class="graph">
+                                        <canvas id="v-chart2" width="200" height="200"></canvas>
+                                    </div>
+                                    <div class="graph">
+                                        <canvas id="v-chart3" width="200" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="contentBox rowCenter flexCol">
+                                <h3 align="center">Media</h3>
+                                <div id="v-uploadMedia" class="flexCol rowCenter">
+                                    <form name="uploadmedia" id="v-uploadForm" enctype="multipart/form-data" onsubmit="uploadMedia(); return false;">
+                                        <label class="custom-file-upload">
+                                            <input type="file" id="v-browsefile" style="display: none" onchange="displayFileName(this)"/>
+                                            <p>Select file to upload</p>
+                                        </label>
+                                        <label class="custom-file-upload" id="v-uploadFile" style="display: none">
+                                            <input type="submit" value="Upload" style="display: none"/>
+                                            <p>Upload file</p>
+                                        </label>
+                                    </form>
+                                    <span id="v-file-selected" style="font: caption"></span>
+                                </div>
+                                <div class="uploadsContainer">
+                                    <div id="v-uploads" class="grid"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
-                <div id="accountview" class="pcontent">
+                <div id="accountview" class="pcontent rowCenter">
 
-                    <div id="changePass" class ="contentBox">
+                    <div id="changePass" class ="contentBox" style="flex-grow: 3">
                         <h3 style="text-align: center">Change Password</h3>
-                        <form action ="javascript:changePassword()" id="changePassForm">
+                        <div class="rowCenter">
+                            <form action ="javascript:changePassword()" id="changePassForm", class="myForm">
                             <label>Old Password</label>
                             <input type="password" id="oldpw" required><br>
                             <label>New Password</label>
                             <input type="password" id="newpw" required><br>
                             <label>Repeat new Password</label>
                             <input type="password" id="rnewpw" required><br>
-                            <button type ="submit">Change</button><br>
+                            <button type ="submit">Change</button>
                         </form>
                         <div id="changePassError" class="error"></div>
+                        </div>
                     </div>
-                    <div id="signOut" style="text-align: center; flex-grow: 1" class="contentBox">
+                    <div id="signOut" style="text-align: center; flex-grow: 3" class="contentBox">
                         <h3>Sign Out</h3><br>
                         <button onclick="signOut()" id="signOutButton">Sign out</button>
                     </div>

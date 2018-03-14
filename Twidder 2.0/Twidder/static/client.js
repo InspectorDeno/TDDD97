@@ -1,5 +1,7 @@
 var passwordLength = 5;
 var currentlyVisiting;
+var visiting, setInfo = false;
+var prefix = "";
 var colors = [
     '#d594d4',
     '#9492d5',
@@ -8,8 +10,12 @@ var colors = [
     '#d5d496',
     '#d59699'
 ];
+var myCharts = [];
+var vCharts = [];
+
 
 window.onload = function(){
+    clearData();
     webSocketConnect();
     displayView();
 };
@@ -24,7 +30,7 @@ window.onbeforeunload = function() {
     }
 };
 
-displayView = function(){
+function displayView(){
 
     var token = localStorage.getItem("token");
     if(token !== null) {
@@ -37,9 +43,9 @@ displayView = function(){
         console.log("Token was null...");
         document.getElementById("view").innerHTML = document.getElementById("loginview").innerHTML;
     }
-};
+}
 
-login = function(){
+function login(){
     var email;
     var password;
 
@@ -48,8 +54,8 @@ login = function(){
         email = arguments[0];
         password = arguments[1];
     } else {
-        email = document.getElementById("email").value;
-        password = document.getElementById("password").value;
+        email = document.getElementById("signin-email").value;
+        password = document.getElementById("signin-password").value;
     }
 
     var params = {
@@ -62,12 +68,10 @@ login = function(){
         if(response.success){
 
             // Add userToken to local storage
-            var sessionToken = response.data;
-            localStorage.setItem("token", sessionToken);
-
-            // Send login info over socket
-            console.log("token: " + sessionToken);
+            localStorage.setItem("token", response.data);
+            localStorage.setItem("email", email);
             currentlyVisiting = email;
+
             // Send login information via socket
             webSocketConnect();
             displayView();
@@ -77,9 +81,9 @@ login = function(){
             console.log(response.message);
         }
     });
-};
+}
 
-signup = function(){
+function signup(){
 
     var email = document.getElementById("signup-email").value;
     var password = document.getElementById("signup-pw").value;
@@ -88,10 +92,9 @@ signup = function(){
     var gender = document.getElementById("signup-gender").value;
     var city = document.getElementById("signup-city").value;
     var country = document.getElementById("signup-country").value;
-
     var repeatPassword = document.getElementById("signup-rpw").value;
 
-    var checkPass = validate(password, repeatPassword);
+    var checkPass = validatePassword(password, repeatPassword);
 
     // Password isn't valid
     if (checkPass !== "OK") {
@@ -100,7 +103,7 @@ signup = function(){
     } else {
 
         // Convert to JSON-object
-        var theUser = {
+        var params = {
             "email": email,
             "password": password,
             "firstname": firstName,
@@ -108,15 +111,6 @@ signup = function(){
             "gender": gender,
             "city": city,
             "country": country
-        };
-
-        var params = {"email": theUser.email,
-            "password": theUser.password,
-            "firstname": theUser.firstname,
-            "familyname": theUser.familyname,
-            "gender": theUser.gender,
-            "city": theUser.city,
-            "country": theUser.country
         };
 
         sendPOSTRequest("/signup", params, function (response) {
@@ -127,9 +121,20 @@ signup = function(){
             }
         });
     }
-};
+}
 
-validate = function(pw, rpw){
+function signOut(){
+    var token = localStorage.getItem("token");
+    var params = {"token": token};
+    clearData();
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    sendPOSTRequest("/signout", params, function () {
+        displayView();
+    })
+}
+
+function validatePassword(pw, rpw){
 
     // Password needs to be long enough
     if(pw.length >= passwordLength) {
@@ -142,13 +147,12 @@ validate = function(pw, rpw){
     } else {
         return "Password has to be at least " + passwordLength + " characters long";
     }
-};
+}
 
-selectTab = function(tab){
+function selectTab(tab){
 
     var tabs = document.getElementById("tabs").getElementsByTagName("div");
-    // loop through all tabs
-
+    // Style tabs for appearance
     for(var i=0; i < tabs.length; i++){
         tabs[i].style.backgroundColor = "#b2b8b5";
         if(tabs[i].id === 'home'){
@@ -158,101 +162,88 @@ selectTab = function(tab){
         } else {
             tabs[i].style.zIndex = '0';
         }
-        console.log(tabs[i].id);
     }
     // specify appearance of specific tab
     tab.style.zIndex = '3';
-    tab.style.borderBottomColor = "#c7ceca";
     tab.style.backgroundColor = "#c7ceca";
 
     var views = document.getElementById("pcontainer").getElementsByClassName("pcontent");
-    // loop through all views
+    // loop through all three views
     for(var j=0; j < views.length; j++) {
+        // Corresponds to the view of the selected tab
         if(views[j].id === tab.id+"view"){
-            // set the correct view to be displayed
+            // Display it
             views[j].style.display = "flex";
-            if(views[j].id === "homeview"){
-                // Get user data from server
-                var sessionToken = localStorage.getItem("token");
-                sendGETrequest("/get-user-data-by-token/?token=" + sessionToken, function (response){
-                    console.log(response.message);
-                    if(response.success){
-                        currentlyVisiting = response.data.email;
-                        updateUserInfo(response.data);
-                        refreshWall();
-                    } else {
-                        console.log(response.message);
-                    }
-                });
+
+            if(tab.id !== "browse"){
+                document.getElementById("browseContainer").style.display = "none";
+            }
+            if(tab.id === "home"){
+                currentlyVisiting = localStorage.getItem("email");
+                visiting = false;
+                prefix = "";
+                // Only get User Data once
+                if(!setInfo) {
+                    var token = localStorage.getItem("token");
+                    sendGETrequest("/get-user-data-by-token/?token=" + token, function (response) {
+                        if (response.success) {
+                            updateUserInfo(response.data);
+                            refreshWall();
+                        } else {
+                            console.log(response.message);
+                        }
+                    });
+                    setInfo = true;
+                }
             }
         } else {
-            // the other ones are hidden
+            // Hide all other viees
             views[j].style.display = "none";
         }
     }
-};
+}
 
-signOut = function(){
-    var sessionToken = localStorage.getItem("token");
-    var params = {"token": sessionToken};
-    sendPOSTRequest("/signout", params, function (response) {
-        if (response.success) {
-            localStorage.removeItem("token");
-            displayView();
-        } else {
-            //Could happen, sign them out anyways...
-            localStorage.removeItem("token");
-            displayView();
-        }
-    })
-};
-
-changePassword = function(){
+function changePassword(){
     var oldpw = document.getElementById("oldpw").value;
     var newpw = document.getElementById("newpw").value;
     var rnewpw = document.getElementById("rnewpw").value;
 
     // Reset the fields
     document.getElementById("changePassForm").reset();
-    var changePass = validate(newpw, rnewpw);
-    if(changePass === "OK"){
-        var token = localStorage.getItem("token");
-
+    var changePassMessage = validatePassword(newpw, rnewpw);
+    if(changePassMessage === "OK"){
         var params = {
-            "token": token,
+            "token": localStorage.getItem("token"),
             "old_password": oldpw,
             "new_password": newpw
         };
+        // Request to change password
         sendPOSTRequest("/change-password", params, function (response) {
-
             document.getElementById("changePassError").innerText = response.message;
-            console.log("changePass error: " + changePass);
-
         })
 
     } else {
         // Output error to user, passwords don't match
-        document.getElementById("changePassError").innerText = changePass;
-        console.log("changePass error: " + changePass);
+        document.getElementById("changePassError").innerText = changePassMessage;
     }
+}
 
-};
-
-writePost = function() {
-    // Get the message
-    var message = document.getElementById("writeMessage").value;
+function writePost(writeForm) {
+    // Get the message from
+    var textArea = writeForm[0];
+    var message = textArea.value;
 
     // Clear message box
-    document.getElementById("writeMessage").value = "";
+    textArea.value = "";
 
     if(message.length !== 0) {
-        var sessionToken = localStorage.getItem("token");
         var params = {
-            "message": message,
-            "token": sessionToken,
-            "email": currentlyVisiting
+            "token": localStorage.getItem("token"),
+            "email": currentlyVisiting,
+            "message": message
         };
         sendPOSTRequest("/post-message", params, function (response) {
+            console.log(response);
             if (response.success){
                 refreshWall();
             }
@@ -261,19 +252,22 @@ writePost = function() {
     }
 }
 
-refreshWall = function() {
+function refreshWall() {
     // Clear the photo wall of option elements
-    resetPhotoWall();
+    if(!visiting){
+        // We only need to do this with our own photos
+        resetPhotoWall();
+    }
 
     // Clear the wall of messages
-    var messages = document.getElementById("wall");
+    var messages = document.getElementById(prefix+"wall");
     while (messages.firstChild) {
         messages.removeChild(messages.firstChild);
     }
 
     // Get user data
-    var sessionToken = localStorage.getItem("token");
-    sendGETrequest("/get-user-messages-by-email/?token=" + sessionToken + "&email=" + currentlyVisiting, function (response) {
+    var token = localStorage.getItem("token");
+    sendGETrequest("/get-user-messages-by-email/?token=" + token + "&email=" + currentlyVisiting, function (response) {
         if (response.success) {
             var userData = response.data;
             // Loops through all messages in reverse order
@@ -283,7 +277,7 @@ refreshWall = function() {
                 // Create a messageDiv to append
                 var color = colors[i%5];
                 var messageDiv = document.createElement("div");
-                messageDiv.id = message.from_user+i;
+                messageDiv.id = prefix+message.from_user+i;
                 messageDiv.className = "wallPost";
                 messageDiv.style.wordBreak = "break-all";
                 messageDiv.style.background = color+"22";
@@ -297,7 +291,7 @@ refreshWall = function() {
                 // Pimp name of writer
                 var writer = document.createTextNode(message.from_user + ": \n");
                 var writerStyle = document.createElement("span");
-                writerStyle.style.webkitTextFillColor = colors[i%5];
+                writerStyle.style.webkitTextFillColor = color;
                 writerStyle.style.fontWeight = "bold";
                 writerStyle.appendChild(writer);
 
@@ -306,50 +300,57 @@ refreshWall = function() {
 
                 messageDiv.appendChild(writerStyle);
                 messageDiv.appendChild(theMessage);
-                document.getElementById("wall").appendChild(messageDiv);
+                document.getElementById(prefix+"wall").appendChild(messageDiv);
             });
+        } else {
+            console.log(response.message);
         }
     })
-};
+}
 
-updateUserInfo = function(userInfo){
-    document.getElementById("currentName").innerText = userInfo.firstname + " " + userInfo.familyname;
-    document.getElementById("currentGender").innerText = userInfo.gender;
-    document.getElementById("currentCity").innerText = userInfo.city;
-    document.getElementById("currentCountry").innerText = userInfo.country;
-    document.getElementById("currentEmail").innerText = userInfo.email;
+function updateUserInfo(userInfo){
+    document.getElementById(prefix+"name").innerText = userInfo.firstname + " " + userInfo.familyname;
+    document.getElementById(prefix+"gender").innerText = userInfo.gender;
+    document.getElementById(prefix+"city").innerText = userInfo.city;
+    document.getElementById(prefix+"country").innerText = userInfo.country;
+    document.getElementById(prefix+"email").innerText = userInfo.email;
     // Profile picture
-    document.getElementById("pictureArea").innerHTML =
+    document.getElementById(prefix+"pictureArea").innerHTML =
         "<img id='profilePic' src=\"data:image/" + userInfo.profile_pic[0][1] + ';base64,' + userInfo.profile_pic[0][0] + "\" " +
         "style='width: 100%;height: 100%;object-fit: cover'/>";
-};
+}
 
-findUser = function() {
+function findUser() {
+    visiting = true;
+    prefix = "v-";
     var email = document.getElementById("userToVisit").value;
-    var sessionToken = localStorage.getItem("token");
+    var token = localStorage.getItem("token");
 
-    sendGETrequest("/get-user-data-by-email/?token=" + sessionToken + "&email=" + email, function (response) {
+    sendGETrequest("/get-user-data-by-email/?token=" + token + "&email=" + email, function (response) {
         if (response.success) {
-            document.getElementById("homeview").style.display = "flex";
+            // Show the visited user's elements
+            document.getElementById("browseContainer").style.display = "flex";
             document.getElementById("noUserError").innerText = "";
             currentlyVisiting = email;
             updateUserInfo(response.data);
             refreshWall();
             downloadMedia(email);
+            if(vCharts.length===0){
+                generateCharts();
+            }
             requestStats(email);
         } else {
             document.getElementById("noUserError").innerText = response.message;
-            console.log("lol no friends");
         }
     })
 }
-
 // This generates the charts
-generateCharts = function () {
+function generateCharts() {
     // Random index for chart colors
     var ri = Math.floor(Math.random() * colors.length);
-
-    genderChart = new Chart(document.getElementById("chart1"), {
+    var ri2 = Math.floor(Math.random() * colors.length);
+    var charts = [];
+    charts[0] = new Chart(document.getElementById(prefix+"chart1"), {
         type: 'pie',
         data: {
             labels: [],
@@ -372,16 +373,14 @@ generateCharts = function () {
             }
         }
     });
-
-    ri = Math.floor(Math.random() * colors.length);
-    usersChart = new Chart(document.getElementById("chart2"), {
+    charts[1] = new Chart(document.getElementById(prefix+"chart2"), {
         type: 'pie',
         data: {
             labels: [],
             datasets: [{
                 backgroundColor: [
-                    colors[ri],
-                    colors[(ri+1)%5]
+                    colors[ri2],
+                    colors[(ri2+1)%5]
                 ],
                 data: []
             }]
@@ -396,8 +395,7 @@ generateCharts = function () {
             }
         }
     });
-
-    messageChart = new Chart(document.getElementById("chart3"), {
+    charts[2] = new Chart(document.getElementById(prefix+"chart3"), {
         type: 'pie',
         data: {
             labels: [],
@@ -416,11 +414,20 @@ generateCharts = function () {
             }
         }
     });
-};
 
-// Updates chart data
-updateCharts = function(index, chart, stats){
-    clearChart(chart);
+    charts.forEach(function (chart,i) {
+        if(visiting){
+            vCharts[i] = chart;
+        } else {
+            myCharts[i] = chart;
+        }
+    });
+}
+
+function updateChart(index, chart, stats){
+    // Clear chart data
+    // chart.data.datasets[0].data = [];
+    // chart.data.labels = [];
     switch(index){
         // Gender data
         case 0:
@@ -440,13 +447,11 @@ updateCharts = function(index, chart, stats){
             break;
         // Messages data
         case 2:
-            var ri = Math.floor(Math.random() * colors.length);
             stats.forEach(function (entry, i) {
                 chart.data.labels[i] = entry.from_user;
                 chart.data.datasets[0].data[i] = entry.count;
-
                 chart.data.datasets[0].backgroundColor[i] =
-                    colors[(ri + i)%5]
+                    colors[(i)%5]
             });
             break;
     }
@@ -454,14 +459,8 @@ updateCharts = function(index, chart, stats){
     chart.update();
 }
 
-clearChart = function(chart){
-    chart.data.datasets[0].data = [];
-    chart.data.labels = [];
-}
-
 // For getting the chart data from the server
-requestStats = function(){
-    console.log("requesting stats");
+function requestStats(){
     var token = localStorage.getItem("token");
     var data;
     if(arguments.length > 0){
@@ -482,7 +481,7 @@ requestStats = function(){
     ws.send(JSON.stringify(data));
 }
 
-sendPOSTRequest = function(url, params, callback){
+function sendPOSTRequest(url, params, callback){
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", url, true);
     xhttp.setRequestHeader("Content-type", "application/json");
@@ -494,7 +493,7 @@ sendPOSTRequest = function(url, params, callback){
     xhttp.send(JSON.stringify(params));
 }
 
-sendGETrequest = function(url, callback) {
+function sendGETrequest(url, callback) {
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", url, true);
     xhttp.onreadystatechange = function () {
@@ -505,33 +504,35 @@ sendGETrequest = function(url, callback) {
     xhttp.send(null);
 }
 
-sendFileRequest = function(url, formData, callback){
+function sendFileRequest(url, formData, callback){
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", url, true);
-    // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.onreadystatechange = function () {
         if (xhttp.readyState === 4 && xhttp.status === 200) {
             callback(JSON.parse(xhttp.responseText));
         }
     };
     xhttp.send(formData);
-};
+}
 
-webSocketConnect = function() {
+function webSocketConnect() {
     ws = new WebSocket('ws://localhost:5000/socket-api');
     ws.onopen = function () {
-        console.log("Opened socket");
-
-        var sessionToken = localStorage.getItem("token");
-        if(sessionToken !== null){
+        console.log("Opened socket, clearing data");
+        clearData();
+        var token = localStorage.getItem("token");
+        if(token !== null){
             var message = {
                 "type": "login",
-                "data": sessionToken
+                "data": token
             };
             ws.send(JSON.stringify(message));
-            generateCharts();
+            currentlyVisiting = localStorage.getItem("email");
+            if(myCharts.length === 0){
+                generateCharts();
+            }
+            downloadMedia();
             requestStats();
-            downloadMedia(); // TODO: For now?
 
         } else {
             console.log("Token was null");
@@ -540,23 +541,38 @@ webSocketConnect = function() {
 
     // Listens for incoming data from server
     ws.onmessage = function (ev) {
-        // console.log("server message: " + ev.data);
         var response = JSON.parse(ev.data);
         if(response.type === "signout"){
             console.log("hey I'm signing out");
             signOut();
         }
         if(response.type === "get-stats"){
-            console.log("got stats");
             var stats = response.data;
-            updateCharts(0, genderChart, stats.gender_stats);
-            updateCharts(1, usersChart, stats.login_stats);
-            if(stats.message_stats !== undefined){
-                updateCharts(2, messageChart, stats.message_stats);
+            if(visiting){
+                updateChart(0, vCharts[0], stats.gender_stats);
+                updateChart(1, vCharts[1], stats.login_stats);
+                if (stats.message_stats !== undefined) {
+                    updateChart(2, vCharts[2], stats.message_stats);
+                }
+            } else {
+                updateChart(0, myCharts[0], stats.gender_stats);
+                updateChart(1, myCharts[1], stats.login_stats);
+                if (stats.message_stats !== undefined) {
+                    updateChart(2, myCharts[2], stats.message_stats);
+                }
             }
         }
     };
-};
+}
+
+function clearData(){
+
+    visiting = false;
+    prefix = "";
+    setInfo = false;
+    myCharts = [];
+    vCharts = [];
+}
 
 
 

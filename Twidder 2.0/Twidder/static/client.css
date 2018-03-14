@@ -9,85 +9,83 @@ body {
     min-width: 100vh;
 }
 
-button {
-    float: right;
-}
-
 h3{
     color: rgb(0, 73, 78);
     margin: 5px 0 12px 0;
 }
 
-#container {
+.rowCenter{
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
+}
+
+.flexCol{
+    display: flex;
+    flex-direction: column;
+}
+
+.contentBox{
+    background: #e0e7e3;
+    margin: 5px;
+    padding: 10px;
+    box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
+}
+.contentBox button{
+    float: right;
+    margin: 4px 0 0 0;
+}
+
+.myForm{
+    display: inline-block;
+    width: auto;
+    margin: 0;
+    padding: 5px;
+}
+
+.myForm label{
+    float:left;
+    height: 20px;
+    font-size: small;
+    margin: 0 10px 0 0;
+}
+.myForm input, .myForm select {
+    float: right;
+    height: 20px;
+    width: 130px;
+}
+
+#logo{
+    margin: 0 10px 0 0;
+    box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
+}
+
+#loginContainer {
     margin-top: 100px;
     height: 400px;
 }
 
-#logo {
-    outline: 3px solid;
-}
-
 #accountArea {
-    display: flex;
-    flex-direction: column;
     margin-left: 10px;
     height: 400px;
     width: 250px;
 }
 
-.accForm{
-    display: inline-block;
-    width: 100%;
-    line-height: 140%;
-    margin: 2px 0;
-}
-.accForm input, .accForm select{
-    width: 130px;
-    float: right;
-    height: 19px;
-}
-
-.accForm button{
-    width: 80px;
-    float: right;
-}
-
-.accForm label {
-    width: 100px;
-    float: left;
-}
-
-#signin {
-    outline: 3px solid;
-    margin-bottom: 10px;
-    padding: 5px;
-    background-color: rgba(173, 216, 230, 0.8);
-}
-
-#signup {
-    display: flex;
-    flex-direction: column;
-    outline: 3px solid;
-    padding: 5px;
-    background-color: rgba(173, 216, 230, 0.8);
-    flex-grow: 1;
+#signin{
     justify-content: space-evenly;
+    margin: 0 0 10px 0;
 }
 
-#profile{
-    display: flex;
-    flex-direction: column;
+#signup{
+    justify-content: space-evenly;
+    margin: 0;
+    flex-grow: 1
+}
+
+#main{
     margin: 0 auto;
     width: 800px;
     /*background-color: rgba(173, 216, 230, 0.8);*/
-}
-
-#tabs{
-    display: flex;
-    justify-content: center;
 }
 
 .tab{
@@ -109,161 +107,56 @@ h3{
     transition-duration: .2s;
 }
 
-#pcontainer{
-    display: flex;
-    flex-direction: column-reverse;
-    background-color: #c7ceca;
-    margin: 0 20px 20px 20px;
-    /*outline: 2px solid;*/
-    z-index: 4;
-    box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
-
-}
-
 .pcontent{
-    justify-content: center;
     margin: 40px 30px 30px 30px;
-    flex-grow: 1;
 }
-#homeview {
-    flex-direction: column;
+
+.grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    align-items: start;
+    justify-items: start;
 }
-#homecontent{
+
+.gridItem {
+    max-width: 100%;
+    margin: 10px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    /*display: block;*/
 }
 
-#browseArea{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+.gridItem img{
+    width: auto;
+    height: 100%;
+    max-width:100%;
+    object-fit: scale-down;
+    box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.5)
 }
 
-#browseArea form{
-    display: inline-block;
-    margin: auto;
+.gridItem video{
+    box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.5)
 }
 
-
-#changePassForm{
-    width: 350px;
-    line-height: 140%;
-}
-
-#changePassForm label{
-    width: 170px;
-    float:left;
-    height: 20px;
-}
-
-#changePassForm input{
-    float: right;
-    width: 150px;
-    height: 20px;
-    flex-grow: 1;
-}
-
-#signOutButton{
-    height: 30px;
-    width: 100px;
-    float: none;
-    background: lightblue;
-}
-
-#userDiv{
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    height: auto;
-    max-width: 270px;
-}
-
-#userInfo{
-    display: flex;
-    justify-content: space-evenly;
-}
-
-#pictureArea{
-    display: block;
-    margin: auto;
-    border: 5px solid #c7ceca;
-    max-width: 190px;
-    max-height: 190px;
-}
-
-#homeWall{
-    display: flex;
-    flex-direction: column;
-    flex-grow: 2;
-    max-width: 400px;
-}
-
-#writePostForm textarea{
-    width: 100%;
-    height: 58px;
-}
-
-#writePostForm button, #postWall button, #changePassForm button{
-    margin: 6px 0 0 0;
-}
-
-#postWall{
-    background: #e0e7e3;
-    padding: 10px;
-    flex-grow: 1;
-}
-
-#wall{
-    overflow: auto;
-    max-height: 253px;
-    padding: 5px;
-    background: #f3faf6;
-}
-
-#canvasArea{
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-}
-
-#uploadMedia{
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    padding: 10px;
-}
-
-#uploadMedia form{
-    margin: auto;
-}
-
-#file-selected{
-    margin: 5px auto;
-    padding: 3px;
-    border: 2px solid #e0e7e3;
-}
-
-#uploads{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 20px;
-    background: #F9F8F9;
-    box-shadow: 6px 6px 11px rgba(0, 0, 0, 0.6);
-    margin: 0 -30px 30px -30px;
-    max-height: 700px;
-    overflow: auto;
-}
-.imgContainer{
-    display: flex;
-    flex-direction: column;
-    margin: 15px auto;
-    max-height: 400px;
-}
-
-.imgContainer:hover{
+.gridItem:hover{
     outline: 5px solid gold;
     transition-duration: .1s;
+}
+
+.gridVideo{
+    grid-column: span 2;
+    margin: auto;
+}
+
+.optionElement{
+    display: inline-block;
+    padding: 6px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-size: small;
+    background: white;
 }
 
 .custom-file-upload{
@@ -275,12 +168,6 @@ h3{
     margin: 5px auto;
 }
 
-.contentBox{
-    background: #e0e7e3;
-    margin: 5px;
-    padding: 10px;
-    box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
-}
 .graph{
     margin: 2px;
 }
@@ -290,3 +177,84 @@ h3{
     width: 100%;
     font-size: 14px;
 }
+
+#pcontainer{
+    background-color: #c7ceca;
+    margin: 0 20px 20px 20px;
+    /*outline: 2px solid;*/
+    z-index: 4;
+    box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
+}
+
+#signOutButton{
+    height: 30px;
+    width: 100px;
+    float: none;
+    background: lightblue;
+}
+
+#userDiv, #v-userDiv{
+    flex-grow: 1;
+    height: auto;
+    max-width: 270px;
+}
+
+.userInfo{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#pictureArea, #v-pictureArea{
+    display: block;
+    margin: auto;
+    border: 5px solid #c7ceca;
+    max-width: 190px;
+    max-height: 190px;
+}
+
+.homeWall{
+    flex-grow: 3;
+    max-width: 400px;
+}
+
+.writePostForm textarea{
+    width: 100%;
+    height: 58px;
+}
+
+.postWall{
+    flex-grow: 1;
+}
+
+#wall, #v-wall{
+    height: 260px;
+    overflow: scroll;
+    padding: 5px;
+    background: #f3faf6;
+    border: 5px solid #c7ceca;
+}
+
+#uploadForm{
+    margin: 0;
+    text-align: center;
+}
+
+#file-selected, #v-file-selected{
+    margin: 5px auto;
+    padding: 3px;
+    border-bottom: 2px solid #e0e7e3;
+}
+
+.uploadsContainer{
+    margin: 0 20px 20px 20px;
+    background: #F9F8F9;
+    border: 5px solid #c7ceca;
+    max-height: 800px;
+    overflow: scroll;
+}
+
+#uploads, #v-uploads{
+    padding: 40px 40px 0 40px;
+    margin: 20px;
+}
+

@@ -52,6 +52,7 @@ def socket():
                             user = message.get('email')
                             visitor = database_helper.get_email(token)
 
+                            print user
                             if visitor is not None:
                                 if user is None:
                                     # send to us
@@ -275,7 +276,11 @@ def post_message():
     if not database_helper.post_message(req['message'], from_user, req['email']):
         return jsonify(success=False, message="Failed to post message!")
 
-    send_stats(False, from_user, req['email'])
+    if from_user == req['email']:
+        send_stats(False, from_user)
+    else:
+        send_stats(False, from_user, req['email'])
+
     return jsonify(success=True, message="Message posted!")
 
 
@@ -432,6 +437,7 @@ def send_stats(to_all, *args):
     if to_all:
         for user in users:
             try:
+                print "1: sending stats to ", user
                 users[user].send(json.dumps(msg))
             except:
                 print "failed to send data to user"
@@ -439,9 +445,14 @@ def send_stats(to_all, *args):
     else:
         # print "args:"
         # print args
-        for user in args:
-            if user in users:
-                users[user].send(json.dumps(msg))
+        if len(args) == 2:
+            for user in args:
+                if user in users:
+                    print "2: sending stats to ", user
+                    users[user].send(json.dumps(msg))
+        else:
+            print "3: sending stats to ", user
+            users[args[0]].send(json.dumps(msg))
 
 
 if __name__ == '__main__':
