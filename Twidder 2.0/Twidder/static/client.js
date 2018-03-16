@@ -278,7 +278,7 @@ function refreshWall() {
                 var color = colors[i%5];
                 var messageDiv = document.createElement("div");
                 messageDiv.id = prefix+message.from_user+i;
-                messageDiv.className = "wallPost";
+                messageDiv.className = "wallPost grabbable";
                 messageDiv.style.wordBreak = "break-all";
                 messageDiv.style.background = color+"22";
                 messageDiv.style.margin = "4px";

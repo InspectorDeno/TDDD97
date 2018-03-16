@@ -78,7 +78,7 @@ displayMedia = function(media, displayOptions) {
         if(isPhoto(file[1])){
             document.getElementById(prefix+"uploads").innerHTML +=
                 "<div class='gridItem'>" +
-                '<img id='+file[2]+' src=\"data:image/' + file[1] + ';base64,' + file[0] + "\" onclick='displayOptions(this)'/></div>";
+                '<img class="clickable" id='+file[2]+' src=\"data:image/' + file[1] + ';base64,' + file[0] + "\" onclick='displayOptions(this)'/></div>";
         } else {
             document.getElementById(prefix+"uploads").innerHTML +=
                 "<div class='gridItem gridVideo'>" +
@@ -141,7 +141,6 @@ displayMessage = function (message, success) {
 displayOptions = function (image) {
     // Clear options
     resetPhotoWall();
-    // image.style.border = '5px solid gold';
 
     var optionsDiv = document.createElement("div");
     optionsDiv.style.display = "block";
@@ -150,7 +149,7 @@ displayOptions = function (image) {
 
     // Create option element 1
     var setAsPicDiv = document.createElement("div");
-    setAsPicDiv.className = "optionElement";
+    setAsPicDiv.className = "optionElement customButton";
     setAsPicDiv.innerText = "Set profile picture";
     // Onclick listener for setting profile picture
     setAsPicDiv.addEventListener('click', function () {
@@ -161,7 +160,7 @@ displayOptions = function (image) {
 
     // Create option element 2
     var deletePicDiv = document.createElement("div");
-    deletePicDiv.className = "optionElement";
+    deletePicDiv.className = "optionElement customButton";
     deletePicDiv.innerText = "Delete";
     deletePicDiv.addEventListener('click', function () {
         console.log("Deleting this one!");

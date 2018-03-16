@@ -2,17 +2,17 @@
 <head>
 
     <meta content="text/view" charset="utf-8" http-equiv="Content-Type">
-    <link href="client.css?1" type="text/css" rel="stylesheet">
-    <script src="client.js?15" type="text/javascript"></script>
-    <script src="dragdrop.js?15" type="text/javascript"></script>
-    <script src="media.js?15" type="text/javascript"></script>
+    <link href="client.css?27" type="text/css" rel="stylesheet">
+    <script src="client.js?16" type="text/javascript"></script>
+    <script src="dragdrop.js?16" type="text/javascript"></script>
+    <script src="media.js?16" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
 
     <script type="text/html" id="loginview">
 
         <div id="loginContainer" class="rowCenter">
             <div id="logo">
-                <img src="twidlogo.png" style="border: 5px solid #e0e7e3"/>
+                <img src="logo.png" style="border: 5px solid #e0e7e3"/>
             </div>
 
             <div class="flexCol">
@@ -22,12 +22,12 @@
                         <input type="email" name="email" id="signin-email" required/><br>
                         <label for="signin-password">Password</label>
                         <input type="password" name="password" id="signin-password" required/><br>
-                        <button type="submit">Login</button>
+                        <button class="customButton" type="submit">Login</button>
                     </form>
                     <div id="signinError" class="error"></div>
                 </div>
                 <div id="signup" class="contentBox flexCol">
-                    <h3 align="center">Sign up</h3>
+                    <h3>Sign up</h3>
                     <form action="javascript:signup()" method="post" class="myForm">
                         <label>First Name</label>
                         <input type="text" name="signup-firstName" id="signup-firstName" required><br>
@@ -50,7 +50,7 @@
                         <input type="password" name="signup-pw" id="signup-pw" required><br>
                         <label>Repeat pw</label>
                         <input type="password" name="signup-rpw" id="signup-rpw" required><br>
-                        <button type="submit">Sign Up</button>
+                        <button class="customButton" type="submit">Sign Up</button>
                     </form>
                     <div id="signupError" class="error"></div>
                 </div>
@@ -62,20 +62,20 @@
         <div id="main" class="flexCol">
             <div id="tabs" class="rowCenter">
                 <div id="home" class="tab" onclick="selectTab(this)" style="z-index: 2" >
-                    <h2 style="margin: 12px">Home</h2>
+                    <h2>Home</h2>
                 </div>
                 <div id="browse" class="tab" onclick="selectTab(this)" style="z-index: 1">
-                    <h2 style="margin: 12px">Browse</h2>
+                    <h2>Browse</h2>
                 </div>
                 <div id="account" class="tab" onclick="selectTab(this)" style="z-index: 0">
-                    <h2 style="margin: 12px">Account</h2>
+                    <h2>Account</h2>
                 </div>
             </div>
             <div id="pcontainer" class="flexCol">
                 <div id="homeview" class="pcontent rowCenter flexCol">
                     <div id="topContent" class="rowCenter">
                         <div id="userDiv" class="contentBox flexCol">
-                            <h3 align="center">User Info</h3>
+                            <h3>User Info</h3>
                             <div class="userInfo">
                                 <div>
                                     <p style="font-style: oblique">Name: </p>
@@ -97,23 +97,23 @@
                         </div>
                         <div class="homeWall flexCol">
                             <div class="contentBox">
-                                <h3 align="center" style="color: rgb(0, 73, 78)">Write Message</h3>
+                                <h3>Write Message</h3>
                                 <form class="writePostForm" name="writePostForm" action="javascript:writePost(writePostForm)">
                                     <textarea id="writeMessage" style="resize:none" wrap="off"></textarea>
-                                    <button type="submit">Post</button>
+                                    <button class="customButton" type="submit">Post</button>
                                 </form>
                             </div>
                             <div class="contentBox postWall flexCol">
-                                <h3 align="center">Wall</h3>
+                                <h3>Wall</h3>
                                 <div id="wall"></div>
                                 <div>
-                                    <button onclick="refreshWall()">Refresh</button>
+                                    <button class="customButton" onclick="refreshWall()">Refresh</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="contentBox">
-                        <h3 align="center">Statistics</h3>
+                        <h3>Statistics</h3>
                         <div class="rowCenter" style="padding: 10px;">
                             <div class="graph">
                                 <canvas id="chart1" width="200" height="200"></canvas>
@@ -127,15 +127,15 @@
                         </div>
                     </div>
                     <div class="contentBox rowCenter flexCol">
-                        <h3 align="center">Media</h3>
+                        <h3>Media</h3>
                         <div id="uploadMedia" class="rowCenter">
                             <div class="flexCol" style="margin: 0 0 10px 0">
                                 <form name="uploadmedia" id="uploadForm" enctype="multipart/form-data" onsubmit="uploadMedia(); return false;">
-                                    <label class="custom-file-upload">
+                                    <label class="customButton customBigButton">
                                         <input type="file" id="browsefile" style="display: none" onchange="displayFileName(this)"/>
                                         <p>Select file to upload</p>
                                     </label>
-                                    <label class="custom-file-upload" id="uploadFile" style="display: none">
+                                    <label class="customButton customBigButton" id="uploadFile" style="display: none">
                                         <input type="submit" value="Upload" style="display: none"/>
                                         <p>Upload file</p>
                                     </label>
@@ -153,11 +153,11 @@
                 <div id="browseview" class="pcontent rowCenter">
                     <div style="width: 100%">
                         <div class="contentBox">
-                            <h3 align="center"> Find user</h3>
+                            <h3>Find user</h3>
                             <div class="rowCenter">
                                 <form action="javascript:findUser()">
                                     <input type="email" id="userToVisit"><br>
-                                    <button type="submit">Search</button>
+                                    <button class="customButton" type="submit">Find</button>
                                 </form>
                                     <div class="error" id="noUserError" style="text-align: center"></div>
                             </div>
@@ -165,7 +165,7 @@
                         <div id="browseContainer" class="flexCol">
                             <div id="v-topContent" class="rowCenter">
                                 <div id="v-userDiv" class="contentBox flexCol">
-                                    <h3 align="center">User Info</h3>
+                                    <h3>User Info</h3>
                                     <div class="userInfo">
                                         <div>
                                             <p style="font-style: oblique">Name: </p>
@@ -187,23 +187,23 @@
                                 </div>
                                 <div class="homeWall flexCol">
                                     <div class="contentBox">
-                                        <h3 align="center" style="color: rgb(0, 73, 78)">Write Message</h3>
+                                        <h3>Write Message</h3>
 
                                         <form class ="writePostForm" name ="vwritePostForm" action ="javascript:writePost(vwritePostForm)">
                                             <textarea id="v-writeMessage" style="resize:none" wrap="off" on></textarea>
-                                            <button type="submit">Post</button>
+                                            <button class="customButton" type="submit">Post</button>
                                         </form>
                                     </div>
                                     <div class="contentBox postWall">
                                         <h3 align="center">Wall</h3>
                                         <div id="v-wall"></div>
-                                        <button onclick="refreshWall()">Refresh</button>
+                                        <button class="customButton" onclick="refreshWall()">Refresh</button>
 
                                     </div>
                                 </div>
                             </div>
                             <div class="contentBox">
-                                <h3 align="center">Statistics</h3>
+                                <h3>Statistics</h3>
                                 <div class="rowCenter" style="padding: 10px">
                                     <div class="graph">
                                         <canvas id="v-chart1" width="200" height="200"></canvas>
@@ -217,14 +217,14 @@
                                 </div>
                             </div>
                             <div class="contentBox rowCenter flexCol">
-                                <h3 align="center">Media</h3>
+                                <h3>Media</h3>
                                 <div id="v-uploadMedia" class="flexCol rowCenter">
                                     <form name="uploadmedia" id="v-uploadForm" enctype="multipart/form-data" onsubmit="uploadMedia(); return false;">
-                                        <label class="custom-file-upload">
+                                        <label class="customButton">
                                             <input type="file" id="v-browsefile" style="display: none" onchange="displayFileName(this)"/>
                                             <p>Select file to upload</p>
                                         </label>
-                                        <label class="custom-file-upload" id="v-uploadFile" style="display: none">
+                                        <label class="customButton" id="v-uploadFile" style="display: none">
                                             <input type="submit" value="Upload" style="display: none"/>
                                             <p>Upload file</p>
                                         </label>
@@ -244,20 +244,23 @@
                         <h3 style="text-align: center">Change Password</h3>
                         <div class="rowCenter">
                             <form action ="javascript:changePassword()" id="changePassForm", class="myForm">
-                            <label>Old Password</label>
-                            <input type="password" id="oldpw" required><br>
-                            <label>New Password</label>
-                            <input type="password" id="newpw" required><br>
-                            <label>Repeat new Password</label>
-                            <input type="password" id="rnewpw" required><br>
-                            <button type ="submit">Change</button>
-                        </form>
-                        <div id="changePassError" class="error"></div>
+                                <label>Old Password</label>
+                                <input type="password" id="oldpw" required><br>
+                                <label>New Password</label>
+                                <input type="password" id="newpw" required><br>
+                                <label>Repeat new Password</label>
+                                <input type="password" id="rnewpw" required><br>
+                                <button class="customButton" type ="submit">Change</button>
+                            <br>
+                            <br>
+                            <div id="changePassError" class="error"></div>
+                            </form>
                         </div>
                     </div>
-                    <div id="signOut" style="text-align: center; flex-grow: 3" class="contentBox">
-                        <h3>Sign Out</h3><br>
-                        <button onclick="signOut()" id="signOutButton">Sign out</button>
+                    <div id="signOut" class="contentBox">
+                        <h3>Right here</h3>
+
+                        <button onclick="signOut()" class="customButton customBigButton">Sign out</button>
                     </div>
                 </div>
             </div>
