@@ -10,5 +10,3 @@ try:
 except KeyboardInterrupt:
     print ">>Shutting down server<<"
     http_server.close()
-
-

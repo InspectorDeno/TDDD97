@@ -1,6 +1,4 @@
-
 body {
-
     font-family: "Trebuchet MS";
     background-image: url("repeat-bg.png");
     background-repeat: repeat;
@@ -9,31 +7,32 @@ body {
     min-width: 100vh;
 }
 
-h3, h2{
+h3,
+h2 {
     text-align: center;
     color: darkslategray;
     margin: 7px 0 12px 0;
 }
 
-.rowCenter{
+.rowCenter {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-.flexCol{
+.flexCol {
     display: flex;
     flex-direction: column;
 }
 
-.contentBox{
+.contentBox {
     background: #e0e7e3;
     margin: 5px;
     padding: 10px;
     box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
 }
 
-.customButton{
+.customButton {
     cursor: pointer;
     display: inline-block;
     border-radius: 3px;
@@ -46,37 +45,39 @@ h3, h2{
     font-size: small;
 }
 
-.customButton:hover{
+.customButton:hover {
     background-image: linear-gradient(to bottom, #AAAAAA, #b6b7b8);
 }
 
-.customBigButton{
+.customBigButton {
     padding: 0 20px;
     float: none;
     margin: 15px 3px 0 3px;
     border-width: 2px;
 }
 
-.myForm{
+.myForm {
     display: inline-block;
     width: auto;
     margin: 0;
     padding: 5px;
 }
 
-.myForm label{
-    float:left;
+.myForm label {
+    float: left;
     height: 20px;
     font-size: small;
     margin: 0 10px 0 0;
 }
-.myForm input, .myForm select {
+
+.myForm input,
+.myForm select {
     float: right;
     height: 20px;
     width: 130px;
 }
 
-#logo{
+#logo {
     margin: 0 10px 0 0;
     box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
 }
@@ -92,24 +93,24 @@ h3, h2{
     width: 250px;
 }
 
-#signin{
+#signin {
     justify-content: space-evenly;
     margin: 0 0 10px 0;
 }
 
-#signup{
+#signup {
     justify-content: space-evenly;
     margin: 0;
     flex-grow: 1
 }
 
-#main{
+#main {
     margin: 0 auto;
     width: 800px;
     /*background-color: rgba(173, 216, 230, 0.8);*/
 }
 
-.tab{
+.tab {
     width: 23%;
     height: 42px;
     margin-top: 20px;
@@ -122,17 +123,18 @@ h3, h2{
     box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
     transition: all .2s;
 }
+
 .tab:hover {
     height: 56px;
     margin-top: 6px;
     transition-duration: .2s;
 }
 
-.pcontent{
+.pcontent {
     margin: 30px;
 }
 
-.grid{
+.grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
@@ -149,37 +151,37 @@ h3, h2{
     /*display: block;*/
 }
 
-.gridItem img{
+.gridItem img {
     width: auto;
     height: 100%;
-    max-width:100%;
+    max-width: 100%;
     border-radius: 5px;
     object-fit: scale-down;
     box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.5)
 }
 
-.gridItem video{
+.gridItem video {
     box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.5)
 }
 
-.gridItem:hover{
+.gridItem:hover {
     outline: 5px solid gold;
     outline-offset: -4px;
     transition-duration: .1s;
 }
 
-.gridVideo{
+.gridVideo {
     grid-column: span 2;
     margin: auto;
 }
 
-.optionElement{
+.optionElement {
     float: none;
     padding: 6px;
     margin: 0 5px;
 }
 
-.graph{
+.graph {
     margin: 2px;
 }
 
@@ -190,7 +192,7 @@ h3, h2{
     text-align: center;
 }
 
-#pcontainer{
+#pcontainer {
     background-color: #c7ceca;
     margin: 0 20px 20px 20px;
     /*outline: 2px solid;*/
@@ -198,18 +200,20 @@ h3, h2{
     box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
 }
 
-#userDiv, #v-userDiv{
+#userDiv,
+#v-userDiv {
     flex-grow: 1;
     height: auto;
     max-width: 270px;
 }
 
-.userInfo{
+.userInfo {
     display: flex;
     justify-content: space-evenly;
 }
 
-#pictureArea, #v-pictureArea{
+#pictureArea,
+#v-pictureArea {
     display: block;
     margin: auto;
     border: 5px solid #c7ceca;
@@ -217,12 +221,12 @@ h3, h2{
     max-height: 190px;
 }
 
-.homeWall{
+.homeWall {
     flex-grow: 3;
     max-width: 400px;
 }
 
-.writePostForm textarea{
+.writePostForm textarea {
     width: 100%;
     height: 84px;
     border: 5px solid #c7ceca;
@@ -231,31 +235,31 @@ h3, h2{
     white-space: pre-line;
 }
 
-.postWall{
+.postWall {
     flex-grow: 1;
 }
 
-#wall, #v-wall{
-    height: 220px;
+#wall,
+#v-wall {
     overflow: auto;
     padding: 5px;
     background: #F9F8F9;
     border: 5px solid #c7ceca;
-
 }
 
-#uploadForm{
+#uploadForm {
     margin: 0;
     text-align: center;
 }
 
-#file-selected, #v-file-selected{
+#file-selected,
+#v-file-selected {
     margin: 5px auto;
     padding: 3px;
     border-bottom: 2px solid #e0e7e3;
 }
 
-.uploadsContainer{
+.uploadsContainer {
     margin: 0 20px 20px 20px;
     background: #F9F8F9;
     border: 5px solid #c7ceca;
@@ -263,7 +267,8 @@ h3, h2{
     overflow: auto;
 }
 
-#uploads, #v-uploads{
+#uploads,
+#v-uploads {
     padding: 40px 40px 0 40px;
     margin: 20px;
 }
@@ -273,12 +278,14 @@ h3, h2{
     flex-grow: 3
 }
 
-#signOut button{
+#signOut button {
     padding: 10px 25px;
 }
 
-button:focus, input, textarea:focus{
-  outline:none !important;
+button:focus,
+input,
+textarea:focus {
+    outline: none !important;
 }
 
 .grabbable {
@@ -286,11 +293,13 @@ button:focus, input, textarea:focus{
     cursor: grab;
     cursor: -moz-grab;
 }
+
 .grabbable:active {
     cursor: grabbing;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
 }
+
 .clickable:hover {
     cursor: pointer;
 }
