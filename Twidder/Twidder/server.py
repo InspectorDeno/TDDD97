@@ -57,7 +57,10 @@ def socket():
             except WebSocketError, e:
                 print "Connection closed..."
                 print e
-                break
+                for user, s in clients.items():
+                    if ws == s:
+                        # Remove socket
+                        del clients[user]
 
         print("Closing socket...")
         for user, s in clients.items():
@@ -256,7 +259,7 @@ def post_message():
         'to_user': req['email']
     }
 
-    print message_info
+    # print message_info
 
     if not database_helper.post_message(message_info):
         return jsonify(success=False, message="Failed to post message!")
@@ -281,7 +284,6 @@ def validate(password):
 def send_stats(to_all, *args):
     # Send data to client
     if len(args) > 0:
-
         stats = database_helper.get_stats(args[0])
     else:
         stats = database_helper.get_stats()
@@ -297,7 +299,10 @@ def send_stats(to_all, *args):
             clients[client].send(json.dumps(msg))
     # Only send to current client
     else:
-        clients[args[0]].send(json.dumps(msg))
+        try:
+            clients[args[0]].send(json.dumps(msg))
+        except KeyError, e:
+            print("Friend isn't online :)")
 
 
 if __name__ == '__main__':

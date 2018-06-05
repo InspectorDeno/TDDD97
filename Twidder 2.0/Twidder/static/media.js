@@ -1,14 +1,13 @@
-ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif','mp4', 'ogg'];
+ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'ogg'];
 
 /**
  * Uploads media to the server
  */
-uploadMedia = function() {
-    var file = document.getElementById(prefix+"browsefile").files[0];
+uploadMedia = function () {
+    var file = document.getElementById(prefix + "browsefile").files[0];
     if (file === undefined) {
         // displayMessage('File type is undefined');
     } else {
-
         var token = localStorage.getItem("token");
         var formData = new FormData();
         formData.append("token", token);
@@ -28,19 +27,19 @@ uploadMedia = function() {
 /**
  * Download media files from server
  */
-downloadMedia = function() {
+downloadMedia = function () {
     console.log("Fetching media files...");
     console.log("prefix is " + prefix);
 
     var token = localStorage.getItem("token");
     var params;
     // Downloading other users media (their email as argument)
-    if (arguments.length > 0){
+    if (arguments.length > 0) {
         params = {
             "email": arguments[0]
         };
         sendPOSTRequest('/download-media/email', params, function (response) {
-            if(response.success){
+            if (response.success) {
                 displayMedia(response.data, false);
             }
         });
@@ -50,12 +49,12 @@ downloadMedia = function() {
         params = {
             "token": token
         };
-        sendPOSTRequest('/download-media/token', params, function(response) {
-            if(response.success){
+        sendPOSTRequest('/download-media/token', params, function (response) {
+            if (response.success) {
                 displayMedia(response.data, true);
                 // Reset upload form
-                document.getElementById(prefix+"uploadForm").reset();
-                document.getElementById(prefix+'uploadFile').style.display = 'none';
+                document.getElementById(prefix + "uploadForm").reset();
+                document.getElementById(prefix + 'uploadFile').style.display = 'none';
             }
         });
     }
@@ -66,21 +65,21 @@ downloadMedia = function() {
  * @param media array of media files to be displayed
  * @param displayOptions True if we want to show media options onclick, false if not
  */
-displayMedia = function(media, displayOptions) {
-    document.getElementById(prefix+"uploads").innerHTML = "";
-    if(displayOptions){
+displayMedia = function (media, displayOptions) {
+    document.getElementById(prefix + "uploads").innerHTML = "";
+    if (displayOptions) {
         // Show upload elements
-        document.getElementById(prefix+"uploadMedia").style.display = 'flex';
+        document.getElementById(prefix + "uploadMedia").style.display = 'flex';
     } else {
-        document.getElementById(prefix+"uploadMedia").style.display = 'none';
+        document.getElementById(prefix + "uploadMedia").style.display = 'none';
     }
     media.forEach(function (file) {
-        if(isPhoto(file[1])){
-            document.getElementById(prefix+"uploads").innerHTML +=
+        if (isPhoto(file[1])) {
+            document.getElementById(prefix + "uploads").innerHTML +=
                 "<div class='gridItem'>" +
-                '<img class="clickable" id='+file[2]+' src=\"data:image/' + file[1] + ';base64,' + file[0] + "\" onclick='displayOptions(this)'/></div>";
+                '<img class="clickable" id=' + file[2] + ' src=\"data:image/' + file[1] + ';base64,' + file[0] + "\" onclick='displayOptions(this)'/></div>";
         } else {
-            document.getElementById(prefix+"uploads").innerHTML +=
+            document.getElementById(prefix + "uploads").innerHTML +=
                 "<div class='gridItem gridVideo'>" +
                 "<video controls><source src=\"data:audio/" + file[1] + ";base64," + file[0] + "\"/></video></div>";
         }
@@ -94,7 +93,7 @@ displayMedia = function(media, displayOptions) {
 displayFileName = function (element) {
     var file = element.files[0].name;
     if (allowedExtensions(file)) {
-        document.getElementById(prefix+'uploadFile').style.display = 'inline-block';
+        document.getElementById(prefix + 'uploadFile').style.display = 'inline-block';
         displayMessage(file, true);
     } else {
         displayMessage('Unsupported file format', false);
@@ -125,12 +124,12 @@ isPhoto = function (ext) {
  * @param success displays green border if true, red if false
  */
 displayMessage = function (message, success) {
-    document.getElementById(prefix+'file-selected').innerText = message;
-    if (success){
-        document.getElementById(prefix+'file-selected').style.borderBottomColor = 'lime';
+    document.getElementById(prefix + 'file-selected').innerText = message;
+    if (success) {
+        document.getElementById(prefix + 'file-selected').style.borderBottomColor = 'lime';
     } else {
-        document.getElementById(prefix+'file-selected').style.borderBottomColor = 'red';
-        document.getElementById(prefix+'uploadFile').style.display = 'none';
+        document.getElementById(prefix + 'file-selected').style.borderBottomColor = 'red';
+        document.getElementById(prefix + 'uploadFile').style.display = 'none';
     }
 };
 
@@ -180,18 +179,18 @@ displayOptions = function (image) {
  */
 resetPhotoWall = function () {
     var allDivs = document.getElementsByClassName("gridItem");
-    for(var i = 0; i < allDivs.length; i++){
-        while(allDivs[i].childElementCount > 1){
+    for (var i = 0; i < allDivs.length; i++) {
+        while (allDivs[i].childElementCount > 1) {
             allDivs[i].removeChild(allDivs[i].lastChild);
         }
         allDivs[i].childNodes[0].style.border = '';
     }
     // Reset upload form
-    document.getElementById(prefix+"uploadForm").reset();
-    document.getElementById(prefix+'uploadFile').style.display = 'none';
+    document.getElementById(prefix + "uploadForm").reset();
+    document.getElementById(prefix + 'uploadFile').style.display = 'none';
     // Clear message text
-    document.getElementById(prefix+'file-selected').style.borderBottomColor = '#e0e7e3';
-    document.getElementById(prefix+'file-selected').innerText = '';
+    document.getElementById(prefix + 'file-selected').style.borderBottomColor = '#e0e7e3';
+    document.getElementById(prefix + 'file-selected').innerText = '';
 };
 
 /**
@@ -206,10 +205,10 @@ changeProfPic = function (file) {
     };
     sendPOSTRequest('/change-profile-pic', params, function (response) {
         console.log(response.message);
-        if(response.success){
+        if (response.success) {
             // Update picture by fetching user data
-            sendGETrequest("/get-user-data-by-token/?token=" + token, function (response){
-                if(response.success){
+            sendGETrequest("/get-user-data-by-token/?token=" + token, function (response) {
+                if (response.success) {
                     updateUserInfo(response.data, false);
                 } else {
                     console.log(response.message);
@@ -222,7 +221,6 @@ changeProfPic = function (file) {
     });
 };
 
-
 deleteMedia = function (file) {
     var token = localStorage.getItem("token");
     var params = {
@@ -231,7 +229,7 @@ deleteMedia = function (file) {
     };
     sendPOSTRequest('/delete-media', params, function (response) {
         console.log(response.message);
-        if(response.success){
+        if (response.success) {
             displayMedia(response.data, true);
             resetPhotoWall();
         }

@@ -154,7 +154,7 @@ h3{
     padding: 10px;
 }
 
-#signOutButton{
+.signOutButton{
     height: 30px;
     width: 100px;
     float: none;

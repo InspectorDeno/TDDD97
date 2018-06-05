@@ -81,7 +81,6 @@ autoLogin = function (email, password) {
     })
 };
 
-
 signup = function(){
 
     var email = document.getElementById("signup-email").value;

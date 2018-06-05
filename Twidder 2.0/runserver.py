@@ -1,4 +1,4 @@
-from gevent.wsgi import WSGIServer
+from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler
 from Twidder import app
 

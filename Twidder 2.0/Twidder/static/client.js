@@ -13,7 +13,6 @@ var colors = [
 var myCharts = [];
 var vCharts = [];
 
-
 window.onload = function () {
     clearData();
     webSocketConnect();
@@ -43,7 +42,6 @@ function displayView() {
         console.log("Token was null...");
         document.getElementById("view").innerHTML = document.getElementById("loginview").innerHTML;
     }
-
 }
 
 function login() {
@@ -67,7 +65,6 @@ function login() {
     sendPOSTRequest("/signin", params, function (response) {
 
         if (response.success) {
-
             // Add userToken to local storage
             localStorage.setItem("token", response.data);
             localStorage.setItem("email", email);
@@ -136,7 +133,6 @@ function signOut() {
 }
 
 function validatePassword(pw, rpw) {
-
     // Password needs to be long enough
     if (pw.length >= passwordLength) {
         // And match with repeatet password
@@ -168,7 +164,6 @@ function changePassword() {
         sendPOSTRequest("/change-password", params, function (response) {
             document.getElementById("changePassError").innerText = response.message;
         })
-
     } else {
         // Output error to user, passwords don't match
         document.getElementById("changePassError").innerText = changePassMessage;
@@ -178,7 +173,6 @@ function changePassword() {
 
 
 function selectTab(tab) {
-
     var tabs = document.getElementById("tabs").getElementsByTagName("div");
     // Style tabs for appearance
     for (var i = 0; i < tabs.length; i++) {
@@ -225,7 +219,7 @@ function selectTab(tab) {
                 }
             }
         } else {
-            // Hide all other viees
+            // Hide all other views
             views[j].style.display = "none";
         }
     }

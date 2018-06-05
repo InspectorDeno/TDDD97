@@ -1,32 +1,32 @@
 var passwordLength = 5;
 var currentlyVisiting;
 var chartColors = [
-  '#2cbfd5',
-  '#95c42a',
-  '#fe6d7d',
-  '#c0bcb6',
-  '#d7d013'
+    '#2cbfd5',
+    '#95c42a',
+    '#fe6d7d',
+    '#c0bcb6',
+    '#d7d013'
 ];
 
-window.onload = function(){
+window.onload = function () {
     webSocketConnect();
     displayView();
 };
 
-window.onbeforeunload = function() {
-    if(ws !== undefined) {
+window.onbeforeunload = function () {
+    if (ws !== undefined) {
         console.log("closing socket...");
-        ws.onclose = function (){}; // disable onclose handler first
+        ws.onclose = function () { }; // disable onclose handler first
         ws.close();
     } else {
         console.log("Socket was undefined...");
     }
 };
 
-displayView = function(){
+displayView = function () {
 
     var token = localStorage.getItem("token");
-    if(token !== null) {
+    if (token !== null) {
         // User has ongoing session
         document.getElementById("view").innerHTML = document.getElementById("profileview").innerHTML;
         // Redirect to home screen
@@ -38,12 +38,12 @@ displayView = function(){
     }
 };
 
-login = function(){
+login = function () {
     var email;
     var password;
 
     // For auto-login after signup
-    if(arguments.length !== 0){
+    if (arguments.length !== 0) {
         email = arguments[0];
         password = arguments[1];
     } else {
@@ -58,7 +58,7 @@ login = function(){
 
     sendPOSTRequest("/signin", params, function (response) {
 
-        if(response.success){
+        if (response.success) {
 
             // Add userToken to local storage
             var sessionToken = response.data;
@@ -78,7 +78,7 @@ login = function(){
     });
 };
 
-signup = function(){
+signup = function () {
 
     var email = document.getElementById("signup-email").value;
     var password = document.getElementById("signup-pw").value;
@@ -109,7 +109,8 @@ signup = function(){
             "country": country
         };
 
-        var params = {"email": theUser.email,
+        var params = {
+            "email": theUser.email,
             "password": theUser.password,
             "firstname": theUser.firstname,
             "familyname": theUser.familyname,
@@ -128,12 +129,12 @@ signup = function(){
     }
 };
 
-validate = function(pw, rpw){
+validate = function (pw, rpw) {
 
     // Password needs to be long enough
-    if(pw.length >= passwordLength) {
+    if (pw.length >= passwordLength) {
         // And match with repeatet password
-        if(pw === rpw){
+        if (pw === rpw) {
             return "OK"
         } else {
             return "Passwords don't match";
@@ -143,11 +144,11 @@ validate = function(pw, rpw){
     }
 };
 
-selectTab = function(tab){
+selectTab = function (tab) {
 
     var tabs = document.getElementById("tabs").getElementsByTagName("div");
     // loop through all tabs
-    for(var i=0; i < tabs.length; i++){
+    for (var i = 0; i < tabs.length; i++) {
         tabs[i].style.borderBottomColor = "black";
         tabs[i].style.backgroundColor = "#969c99";
     }
@@ -157,15 +158,15 @@ selectTab = function(tab){
 
     var views = document.getElementById("pcontainer").getElementsByClassName("pcontent");
     // loop through all views
-    for(var j=0; j < views.length; j++) {
-        if(views[j].id === tab.id+"view"){
+    for (var j = 0; j < views.length; j++) {
+        if (views[j].id === tab.id + "view") {
             // set the correct view to be displayed
             views[j].style.display = "flex";
-            if(views[j].id === "homeview"){
+            if (views[j].id === "homeview") {
                 // Get user data from server
                 var sessionToken = localStorage.getItem("token");
-                sendGETrequest("/get-user-data-by-token/?token=" + sessionToken, function (response){
-                    if(response.success){
+                sendGETrequest("/get-user-data-by-token/?token=" + sessionToken, function (response) {
+                    if (response.success) {
                         currentlyVisiting = response.data.email;
                         updateUserInfo(response.data);
                         refreshWall();
@@ -181,9 +182,9 @@ selectTab = function(tab){
     }
 };
 
-signOut = function(){
+signOut = function () {
     var sessionToken = localStorage.getItem("token");
-    var params = {"token": sessionToken};
+    var params = { "token": sessionToken };
     sendPOSTRequest("/signout", params, function (response) {
         if (response.success) {
             localStorage.removeItem("token");
@@ -196,7 +197,7 @@ signOut = function(){
     })
 };
 
-changePassword = function(){
+changePassword = function () {
     var oldpw = document.getElementById("oldpw").value;
     var newpw = document.getElementById("newpw").value;
     var rnewpw = document.getElementById("rnewpw").value;
@@ -204,7 +205,7 @@ changePassword = function(){
     // Reset the fields
     document.getElementById("changePassForm").reset();
     var changePass = validate(newpw, rnewpw);
-    if(changePass === "OK"){
+    if (changePass === "OK") {
         var token = localStorage.getItem("token");
 
         var params = {
@@ -234,7 +235,7 @@ function writePost() {
     // Clear message box
     document.getElementById("writeMessage").value = "";
 
-    if(message.length !== 0) {
+    if (message.length !== 0) {
         var sessionToken = localStorage.getItem("token");
         var params = {
             "message": message,
@@ -242,7 +243,7 @@ function writePost() {
             "email": currentlyVisiting
         };
         sendPOSTRequest("/post-message", params, function (response) {
-            if (response.success){
+            if (response.success) {
                 refreshWall();
             }
         });
@@ -263,7 +264,7 @@ function refreshWall() {
         if (response.success) {
             var userdata = response.data;
             // Loops through all messages in reverse order
-            for(var i = userdata.content.length - 1; i >= 0; i--){
+            for (var i = userdata.content.length - 1; i >= 0; i--) {
 
                 // Create a messageDiv to append
                 var messageDiv = document.createElement("div");
@@ -293,7 +294,7 @@ function refreshWall() {
     })
 }
 
-function updateUserInfo(userInfo){
+function updateUserInfo(userInfo) {
 
     document.getElementById("currentName").innerText = userInfo.firstname + " " + userInfo.familyname;
     document.getElementById("currentGender").innerText = userInfo.gender;
@@ -332,8 +333,8 @@ generateCharts = function () {
             datasets: [{
                 backgroundColor: [
                     chartColors[ri],
-                    chartColors[(ri+1)%5],
-                    chartColors[(ri+2)%5]
+                    chartColors[(ri + 1) % 5],
+                    chartColors[(ri + 2) % 5]
                 ],
                 data: []
             }]
@@ -357,7 +358,7 @@ generateCharts = function () {
             datasets: [{
                 backgroundColor: [
                     chartColors[ri],
-                    chartColors[(ri+1)%5]
+                    chartColors[(ri + 1) % 5]
                 ],
                 data: []
             }]
@@ -372,7 +373,7 @@ generateCharts = function () {
             }
         }
     });
-        messageChart = new Chart(document.getElementById("chart3"), {
+    messageChart = new Chart(document.getElementById("chart3"), {
         type: 'pie',
         data: {
             labels: [],
@@ -394,8 +395,8 @@ generateCharts = function () {
 };
 
 // Updates chart data
-function updateStats(index, chart, stats){
-    switch(index){
+function updateStats(index, chart, stats) {
+    switch (index) {
         // Gender data
         case 0:
             stats.forEach(function (entry, i) {
@@ -420,10 +421,7 @@ function updateStats(index, chart, stats){
                 chart.data.datasets[0].data[i] = entry.count;
 
                 chart.data.datasets[0].backgroundColor[i] =
-                    chartColors[(ri + i)%5]
-
-                // if (i >= chart.data.datasets[0].backgroundColor.length){
-                // }
+                    chartColors[(ri + i) % 5]
             });
             break;
     }
@@ -432,7 +430,7 @@ function updateStats(index, chart, stats){
 }
 
 // For getting the chart data from the server
-function requestStats(){
+function requestStats() {
     console.log("requesting stats");
     var token = localStorage.getItem("token");
     var data = {
@@ -442,7 +440,7 @@ function requestStats(){
     ws.send(JSON.stringify(data));
 }
 
-function sendPOSTRequest(url, params, callback){
+function sendPOSTRequest(url, params, callback) {
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", url, true);
     xhttp.setRequestHeader("Content-type", "application/json");
@@ -471,7 +469,7 @@ function webSocketConnect() {
         console.log("Opened socket");
 
         var sessionToken = localStorage.getItem("token");
-        if(sessionToken !== null){
+        if (sessionToken !== null) {
             var message = {
                 "type": "login",
                 "data": sessionToken
@@ -489,16 +487,16 @@ function webSocketConnect() {
     ws.onmessage = function (ev) {
         // console.log("server message: " + ev.data);
         var response = JSON.parse(ev.data);
-        if(response.type === "signout"){
+        if (response.type === "signout") {
             console.log("hey I'm signing out");
             signOut();
         }
-        if(response.type === "get-stats"){
+        if (response.type === "get-stats") {
             console.log("got stats");
             var stats = response.data;
             updateStats(0, genderChart, stats.gender_stats);
             updateStats(1, usersChart, stats.login_stats);
-            if(stats.message_stats !== undefined){
+            if (stats.message_stats !== undefined) {
                 updateStats(2, messageChart, stats.message_stats);
             }
         }
